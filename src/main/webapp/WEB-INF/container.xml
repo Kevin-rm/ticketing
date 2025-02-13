@@ -1,0 +1,4 @@
+<managed-instances xmlns="http://www.matsd.mg/javaframework/schema/managedinstances"
+                   xmlns:container="http://www.matsd.mg/javaframework/schema/container">
+    <container:component-scan base-package="mg.itu.ticketing"/>
+</managed-instances>
