@@ -1,4 +1,4 @@
-package mg.itu.ticketing;
+package mg.itu.ticketing.controller;
 
 import mg.itu.prom16.annotations.Controller;
 import mg.itu.prom16.annotations.Get;
