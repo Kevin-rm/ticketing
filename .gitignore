@@ -35,4 +35,4 @@ build/
 .DS_Store
 
 src/main/resources/META-INF/persistence.xml
-maven.settings.xml
+maven_settings.xml

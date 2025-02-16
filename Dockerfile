@@ -6,7 +6,7 @@ COPY mvnw .
 COPY pom.xml .
 
 RUN if [ ! -d "/root/.m2" ]; then mkdir /root/.m2; fi
-COPY maven.settings.xml /root/.m2/settings.xml
+COPY maven_settings.xml /root/.m2/settings.xml
 RUN ./mvnw dependency:go-offline -B
 
 COPY src/ ./src
