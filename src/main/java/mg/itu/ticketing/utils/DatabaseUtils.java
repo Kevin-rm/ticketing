@@ -11,6 +11,7 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public final class DatabaseUtils {
     public  static final EntityManagerFactory ENTITY_MANAGER_FACTORY;
@@ -53,14 +54,17 @@ public final class DatabaseUtils {
         return ENTITY_MANAGER_FACTORY.createEntityManager();
     }
 
-    public static void execute(Consumer<EntityManager> consumer) {
+    public static <T> T execute(Function<EntityManager, T> function) {
         try (EntityManager entityManager = entityManager()) {
-            consumer.accept(entityManager);
+            return function.apply(entityManager);
         }
     }
 
     public static void executeWithTransaction(Consumer<EntityManager> consumer) {
-        execute(entityManager -> executeWithTransaction(entityManager, consumer));
+        execute(entityManager -> {
+            executeWithTransaction(entityManager, consumer);
+            return null;
+        });
     }
 
     private static void executeWithTransaction(EntityManager entityManager, Consumer<EntityManager> consumer) {
