@@ -40,6 +40,11 @@ public final class DatabaseUtils {
             "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
 
         ENTITY_MANAGER_FACTORY = PERSISTENCE_PROVIDER.createEntityManagerFactory("default", PROPERTIES);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (ENTITY_MANAGER_FACTORY == null || !ENTITY_MANAGER_FACTORY.isOpen()) return;
+            ENTITY_MANAGER_FACTORY.close();
+        }));
     }
 
     private DatabaseUtils() { }

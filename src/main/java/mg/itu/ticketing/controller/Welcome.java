@@ -8,6 +8,6 @@ public class Welcome {
 
     @Get
     public String hello() {
-        return "Hello World";
+        return "Hello World!";
     }
 }
