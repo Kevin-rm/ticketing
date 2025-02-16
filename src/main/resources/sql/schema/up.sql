@@ -61,6 +61,7 @@ CREATE TABLE plane_seat
     seats_count  INTEGER NOT NULL DEFAULT 0,
     plane_id     INTEGER NOT NULL,
     seat_type_id INTEGER NOT NULL,
+    UNIQUE (plane_id, seat_type_id),
     FOREIGN KEY (plane_id) REFERENCES plane (id),
     FOREIGN KEY (seat_type_id) REFERENCES seat_type (id)
 );
