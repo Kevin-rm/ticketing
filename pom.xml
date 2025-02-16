@@ -12,8 +12,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>19</maven.compiler.target>
-        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
         <junit.version>5.10.2</junit.version>
     </properties>
 
@@ -63,6 +63,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/Kevin-rm/matsd-javaframeworkproject</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

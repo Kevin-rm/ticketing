@@ -5,7 +5,8 @@ import mg.itu.prom16.annotations.Get;
 
 @Controller
 public class Welcome {
-    @Get("/")
+
+    @Get
     public String hello() {
         return "Hello World";
     }
