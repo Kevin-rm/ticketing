@@ -67,7 +67,7 @@ public final class DatabaseUtils {
         });
     }
 
-    private static void executeWithTransaction(EntityManager entityManager, Consumer<EntityManager> consumer) {
+    public static void executeWithTransaction(EntityManager entityManager, Consumer<EntityManager> consumer) {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         try {
             entityTransaction.begin();
