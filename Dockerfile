@@ -5,7 +5,7 @@ COPY mvnw .
 COPY pom.xml .
 RUN if [ ! -d "/root/.m2" ]; then mkdir /root/.m2; fi
 COPY maven.settings.xml /root/.m2/settings.xml
-COPY src/ .
+COPY src/ ./src
 RUN ./mvnw clean package -DskipTests -Dmaven.javadoc.skip=true
 
 FROM tomcat:10.1-jre21
