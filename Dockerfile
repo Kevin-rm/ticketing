@@ -8,7 +8,7 @@ COPY maven.settings.xml /root/.m2/settings.xml
 COPY src/ ./src
 RUN ./mvnw clean package -DskipTests -Dmaven.javadoc.skip=true
 
-FROM tomcat:10.1-jre21
+FROM tomcat:10.1-jdk21
 WORKDIR /usr/local/tomcat
 COPY --from=build /app/target/ticketing-1.0-SNAPSHOT.war webapps/ticketing.war
 EXPOSE 8080
