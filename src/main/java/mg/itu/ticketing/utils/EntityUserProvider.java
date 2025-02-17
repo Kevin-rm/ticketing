@@ -16,7 +16,7 @@ public class EntityUserProvider implements UserProvider {
         Assert.state(user instanceof mg.itu.ticketing.entity.User,
             "L'argument user doit être une instance de \"mg.itu.ticketing.entity.User\"");
 
-        DatabaseUtils.executeWithTransaction(entityManager -> entityManager.persist(user));
+        DatabaseUtils.executeTransactional(entityManager -> entityManager.persist(user));
     }
 
     @Override

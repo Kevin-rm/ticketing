@@ -60,14 +60,14 @@ public final class DatabaseUtils {
         }
     }
 
-    public static void executeWithTransaction(Consumer<EntityManager> consumer) {
+    public static void executeTransactional(Consumer<EntityManager> consumer) {
         execute(entityManager -> {
-            executeWithTransaction(entityManager, consumer);
+            executeTransactional(entityManager, consumer);
             return null;
         });
     }
 
-    public static void executeWithTransaction(EntityManager entityManager, Consumer<EntityManager> consumer) {
+    public static void executeTransactional(EntityManager entityManager, Consumer<EntityManager> consumer) {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         try {
             entityTransaction.begin();
