@@ -3,11 +3,13 @@ package mg.itu.ticketing.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 @Entity
 @DynamicInsert
 public class Reservation {

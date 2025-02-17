@@ -7,6 +7,7 @@ import mg.matsd.javaframework.security.base.UserRole;
 import java.util.List;
 
 @Getter
+@ToString
 @Entity
 @Table(name = "_user")
 public class User implements mg.matsd.javaframework.security.base.User {

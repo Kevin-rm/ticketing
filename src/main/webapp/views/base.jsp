@@ -9,8 +9,8 @@
     <title>
         <layout:block name="title">Ticketing</layout:block>
     </title>
-    <layout:block name="styles"/>
     <link rel="stylesheet" href="<c:url value="/public/assets/css/bootstrap.min.css"/>">
+    <layout:block name="styles"/>
 </head>
 <body>
     <layout:block name="body"/>

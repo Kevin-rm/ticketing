@@ -3,8 +3,10 @@ package mg.itu.ticketing.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
+@ToString
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"seat_pricing_id", "reservation_id"}))
 public class SeatReservation {
