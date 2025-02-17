@@ -2,7 +2,7 @@
 <%@ taglib prefix="layout" uri="http://www.matsd.mg/javaframework/tags/template-inheritance" %>
 
 <layout:extends file="/views/base">
-    <layout:put block="title">Inscription - Ticketing</layout:put>
+    <layout:put block="title" type="REPLACE">Inscription - Ticketing</layout:put>
 
     <layout:put block="styles">
         <style>
@@ -47,11 +47,6 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Mot de passe</label>
                         <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirmer le mot de passe</label>
-                        <input type="password" class="form-control" id="password_confirmation"
-                               name="password_confirmation" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
                     <div class="text-center mt-3">
