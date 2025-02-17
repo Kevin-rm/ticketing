@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import mg.matsd.javaframework.security.base.UserRole;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,7 +34,14 @@ public class User implements mg.matsd.javaframework.security.base.User {
     @Setter
     @ManyToMany
     @JoinTable(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}))
-    private List<Role> userRoles;
+    private List<Role> userRoles = new ArrayList<>();
+
+    public User() {
+        Role role = new Role();
+        role.setValue("USER");
+
+        userRoles.add(role);
+    }
 
     @Override
     public String getIdentifier() {

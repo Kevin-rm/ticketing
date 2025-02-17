@@ -80,8 +80,9 @@ CREATE TABLE seat_pricing
 CREATE TABLE reservation
 (
     id        SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id   INTEGER   NOT NULL,
+    status    VARCHAR(9) NOT NULL,
+    timestamp TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id   INTEGER    NOT NULL,
     FOREIGN KEY (user_id) REFERENCES _user (id)
 );
 
