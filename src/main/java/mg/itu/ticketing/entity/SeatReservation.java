@@ -4,26 +4,25 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Entity
-public class SeatPricing {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"seat_pricing_id", "reservation_id"}))
+public class SeatReservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Setter
-    @Column(precision = 10, scale = 2, nullable = false)
-    private BigDecimal unitPrice;
+    @Column(nullable = false)
+    private Integer seatsCount;
 
     @Setter
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Seat seat;
+    private SeatPricing seatPricing;
 
     @Setter
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Flight flight;
+    private Reservation reservation;
 }

@@ -8,22 +8,21 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
-public class SeatPricing {
+public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Setter
-    @Column(precision = 10, scale = 2, nullable = false)
-    private BigDecimal unitPrice;
+    @Column(precision = 5, scale = 2, nullable = false)
+    private BigDecimal percentage;
 
     @Setter
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Seat seat;
+    @Column(nullable = false)
+    private Integer seatsCount;
 
     @Setter
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Flight flight;
+    @OneToOne
+    @JoinColumn(nullable = false, unique = true)
+    private SeatPricing seatPricing;
 }

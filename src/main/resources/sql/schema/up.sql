@@ -36,7 +36,7 @@ CREATE TABLE _user
     firstname VARCHAR(75)  NOT NULL,
     lastname  VARCHAR(75)  NOT NULL,
     email     VARCHAR(255) NOT NULL UNIQUE,
-    password  VARCHAR(255) NOT NULL,
+    password  VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE _role
@@ -55,7 +55,7 @@ CREATE TABLE user_role
     FOREIGN KEY (role_id) REFERENCES _role (id)
 );
 
-CREATE TABLE plane_seat
+CREATE TABLE seat
 (
     id           SERIAL PRIMARY KEY,
     seats_count  INTEGER NOT NULL DEFAULT 0,
@@ -68,12 +68,12 @@ CREATE TABLE plane_seat
 
 CREATE TABLE seat_pricing
 (
-    id            SERIAL PRIMARY KEY,
-    unit_price    NUMERIC(10, 2) NOT NULL,
-    plane_seat_id INTEGER        NOT NULL,
-    flight_id     INTEGER        NOT NULL,
-    UNIQUE (plane_seat_id, flight_id),
-    FOREIGN KEY (plane_seat_id) REFERENCES plane_seat (id),
+    id         SERIAL PRIMARY KEY,
+    unit_price NUMERIC(10, 2) NOT NULL,
+    seat_id    INTEGER        NOT NULL,
+    flight_id  INTEGER        NOT NULL,
+    UNIQUE (seat_id, flight_id),
+    FOREIGN KEY (seat_id) REFERENCES seat (id),
     FOREIGN KEY (flight_id) REFERENCES flight (id)
 );
 
@@ -85,15 +85,15 @@ CREATE TABLE reservation
     FOREIGN KEY (user_id) REFERENCES _user (id)
 );
 
-CREATE TABLE reservation_seat
+CREATE TABLE seat_reservation
 (
     id              SERIAL PRIMARY KEY,
     seats_count     INTEGER NOT NULL,
-    reservation_id  INTEGER NOT NULL,
     seat_pricing_id INTEGER NOT NULL,
-    UNIQUE (reservation_id, seat_pricing_id),
-    FOREIGN KEY (reservation_id) REFERENCES reservation (id),
-    FOREIGN KEY (seat_pricing_id) REFERENCES seat_pricing (id)
+    reservation_id  INTEGER NOT NULL,
+    UNIQUE (seat_pricing_id, reservation_id),
+    FOREIGN KEY (seat_pricing_id) REFERENCES seat_pricing (id),
+    FOREIGN KEY (reservation_id) REFERENCES reservation (id)
 );
 
 CREATE TABLE discount
@@ -105,11 +105,11 @@ CREATE TABLE discount
     FOREIGN KEY (seat_pricing_id) REFERENCES seat_pricing (id)
 );
 
-CREATE TABLE settings
+CREATE TABLE _settings
 (
     id                     SERIAL PRIMARY KEY,
     min_reservation_hours  INTEGER   NOT NULL,
     min_cancellation_hours INTEGER   NOT NULL,
-    modified_by            INTEGER REFERENCES _user (id),
-    modified_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    modified_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_by            INTEGER   NOT NULL REFERENCES _user (id)
 );
