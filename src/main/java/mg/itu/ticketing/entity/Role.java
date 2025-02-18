@@ -14,4 +14,11 @@ public class Role extends SimpleUserRole {
 
     @Column(length = 75, nullable = false)
     private String value;
+
+    public static Role createDefault() {
+        Role role = new Role();
+        role.setValue("USER");
+
+        return role;
+    }
 }

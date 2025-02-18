@@ -1,5 +1,8 @@
-package mg.itu.ticketing.utils;
+package mg.itu.ticketing.service;
 
+import mg.itu.ticketing.request.RegistrationRequest;
+import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.itu.ticketing.utils.Facade;
 import mg.matsd.javaframework.core.annotations.Component;
 import mg.matsd.javaframework.core.utils.Assert;
 import mg.matsd.javaframework.core.utils.StringUtils;
@@ -9,7 +12,19 @@ import mg.matsd.javaframework.security.exceptions.UserNotFoundException;
 import mg.matsd.javaframework.security.provider.UserProvider;
 
 @Component
-public class EntityUserProvider implements UserProvider {
+public class UserService implements UserProvider {
+
+    public void save(final RegistrationRequest registrationRequest) {
+        mg.itu.ticketing.entity.User user = new mg.itu.ticketing.entity.User();
+        user.setFirstname(registrationRequest.getFirstname());
+        user.setLastname(registrationRequest.getLastname());
+        user.setEmail(registrationRequest.getEmail());
+        user.setPassword(Facade.passwordHasher()
+            .hash(registrationRequest.getPassword())
+        );
+
+        addUser(user);
+    }
 
     @Override
     public void addUser(User user) throws DuplicateUserException {

@@ -34,6 +34,7 @@ public class User implements mg.matsd.javaframework.security.base.User {
     @Setter
     @ManyToMany
     @JoinTable(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}))
+<<<<<<< Updated upstream
     private List<Role> userRoles = new ArrayList<>();
 
     public User() {
@@ -42,6 +43,9 @@ public class User implements mg.matsd.javaframework.security.base.User {
 
         userRoles.add(role);
     }
+=======
+    private List<Role> userRoles = List.of(Role.createDefault());
+>>>>>>> Stashed changes
 
     @Override
     public String getIdentifier() {
