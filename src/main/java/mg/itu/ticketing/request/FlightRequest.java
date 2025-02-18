@@ -7,7 +7,7 @@ import mg.matsd.javaframework.validation.constraints.basic.Required;
 import java.time.LocalDateTime;
 
 @Data
-public final class FlightRequest {
+public class FlightRequest {
     @Required
     private LocalDateTime departureTimestamp;
 

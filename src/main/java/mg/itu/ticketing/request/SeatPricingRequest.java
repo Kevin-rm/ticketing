@@ -3,17 +3,16 @@ package mg.itu.ticketing.request;
 import lombok.Data;
 import mg.matsd.javaframework.validation.constraints.basic.Required;
 
+import java.math.BigDecimal;
+
 @Data
-public class RegistrationRequest {
+public class SeatPricingRequest {
     @Required
-    private String firstname;
+    private BigDecimal unitPrice;
 
     @Required
-    private String lastname;
+    private Integer seatId;
 
     @Required
-    private String email;
-
-    @Required
-    private String password;
+    private Integer flightId;
 }
