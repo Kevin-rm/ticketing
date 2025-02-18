@@ -37,6 +37,10 @@ public class FlightService {
         entityManager.merge(populateFromRequest(flight, request, entityManager));
     }
 
+    public void delete(final Flight flight, final EntityManager entityManager) {
+        entityManager.remove(flight);
+    }
+
     private Flight populateFromRequest(
         final Flight flight, final FlightRequest request, final EntityManager entityManager
     ) {
