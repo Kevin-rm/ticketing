@@ -7,6 +7,8 @@ import mg.itu.ticketing.enums.ReservationStatus;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -27,4 +29,7 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "reservation")
+    private List<SeatReservation> seatReservations = new ArrayList<>();
 }
