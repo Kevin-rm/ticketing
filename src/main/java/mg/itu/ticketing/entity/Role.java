@@ -17,7 +17,7 @@ public class Role extends SimpleUserRole {
 
     public static Role createDefault() {
         Role role = new Role();
-        role.setValue("USER");
+        role.setValue("CUSTOMER");
 
         return role;
     }

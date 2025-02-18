@@ -18,6 +18,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStatus status = ReservationStatus.getDefault();
@@ -30,6 +31,6 @@ public class Reservation {
     @JoinColumn(nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatReservation> seatReservations = new ArrayList<>();
 }

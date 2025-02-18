@@ -1,9 +1,11 @@
 package mg.itu.ticketing.service;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.request.FlightRequest;
+import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.matsd.javaframework.core.annotations.Component;
 
 import java.util.List;
@@ -39,6 +41,31 @@ public class FlightService {
 
     public void delete(final Flight flight, final EntityManager entityManager) {
         entityManager.remove(flight);
+    }
+
+    public List<Flight> search(final FlightSearchRequest request, final EntityManager entityManager) {
+        String sql = """
+            SELECT f
+            FROM Flight f 
+            WHERE (:departureCityId IS NULL OR f.departureCity.id = :departureCityId) AND 
+                  (:arrivalCityId   IS NULL OR f.arrivalCity.id = :arrivalCityId)
+        """;
+
+        if (request.getDepartureTimestampMin() != null)
+            sql += " AND f.departureTimestamp >= :departureTimestampMin";
+        if (request.getDepartureTimestampMax() != null)
+            sql += " AND f.departureTimestamp <= :departureTimestampMax";
+
+        TypedQuery<Flight> typedQuery = entityManager.createQuery(sql, Flight.class)
+            .setParameter("departureCityId", request.getDepartureCityId())
+            .setParameter("arrivalCityId", request.getArrivalCityId());
+
+        if (request.getDepartureTimestampMin() != null)
+            typedQuery.setParameter("departureTimestampMin", request.getDepartureTimestampMin());
+        if (request.getDepartureTimestampMax() != null)
+            typedQuery.setParameter("departureTimestampMax", request.getDepartureTimestampMax());
+
+        return typedQuery.getResultList();
     }
 
     private Flight populateFromRequest(
