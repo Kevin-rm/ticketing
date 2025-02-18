@@ -14,14 +14,12 @@ import mg.matsd.javaframework.security.provider.UserProvider;
 @Component
 public class UserService implements UserProvider {
 
-    public void save(final RegistrationRequest registrationRequest) {
+    public void insert(final RegistrationRequest registrationRequest) {
         mg.itu.ticketing.entity.User user = new mg.itu.ticketing.entity.User();
         user.setFirstname(registrationRequest.getFirstname());
         user.setLastname(registrationRequest.getLastname());
         user.setEmail(registrationRequest.getEmail());
-        user.setPassword(Facade.passwordHasher()
-            .hash(registrationRequest.getPassword())
-        );
+        user.setPassword(Facade.passwordHasher().hash(registrationRequest.getPassword()));
 
         addUser(user);
     }

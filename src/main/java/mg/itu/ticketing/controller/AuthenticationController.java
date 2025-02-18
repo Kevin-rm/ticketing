@@ -66,7 +66,7 @@ public class AuthenticationController {
             return "redirect:/inscription";
 
         try {
-            userService.save(request);
+            userService.insert(request);
             redirectData.add("success", "Inscription réussie");
 
             return "redirect:/connexion";
