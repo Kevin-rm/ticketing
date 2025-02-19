@@ -1,5 +1,6 @@
 package mg.itu.ticketing.service;
 
+import jakarta.persistence.NoResultException;
 import mg.itu.ticketing.request.RegistrationRequest;
 import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.itu.ticketing.utils.Facade;
@@ -41,12 +42,13 @@ public class UserService implements UserProvider {
     public User loadUserByIdentifier(String s) throws UserNotFoundException {
         Assert.state(StringUtils.hasText(s));
 
-        User user = DatabaseUtils.execute(entityManager ->
-            entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", mg.itu.ticketing.entity.User.class)
-                .setParameter("email", s)
-                .getSingleResult());
-
-        if (user == null) throw new UserNotFoundException(s);
-        return user;
+        try {
+            return DatabaseUtils.execute(entityManager ->
+                entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", mg.itu.ticketing.entity.User.class)
+                    .setParameter("email", s)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            throw new UserNotFoundException(s);
+        }
     }
 }
