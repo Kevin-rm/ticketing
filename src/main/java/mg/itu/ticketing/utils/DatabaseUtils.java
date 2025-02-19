@@ -3,6 +3,7 @@ package mg.itu.ticketing.utils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.spi.PersistenceProvider;
 import mg.matsd.javaframework.core.utils.Assert;
 import mg.matsd.javaframework.core.utils.StringUtils;
