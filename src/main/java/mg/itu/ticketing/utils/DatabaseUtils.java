@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import mg.matsd.javaframework.core.utils.Assert;
 import mg.matsd.javaframework.core.utils.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -13,8 +12,6 @@ public final class DatabaseUtils {
     public static final EntityManagerFactory ENTITY_MANAGER_FACTORY;
 
     static {
-        Map<String, String> additionalProperties = new HashMap<>();
-
         final String databaseUrl = System.getenv("DATABASE_URL");
         final String databaseUsername = System.getenv("DATABASE_USERNAME");
         final String databasePassword = System.getenv("DATABASE_PASSWORD");
@@ -24,11 +21,11 @@ public final class DatabaseUtils {
             !StringUtils.isNullOrBlank(databasePassword),
             "Les variables d'environnement de la base de données ne sont pas définies");
 
-        additionalProperties.put("hibernate.connection.url", databaseUrl);
-        additionalProperties.put("hibernate.connection.username", databaseUsername);
-        additionalProperties.put("hibernate.connection.password", databasePassword);
-
-        ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default", additionalProperties);
+        ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default", Map.of(
+            "hibernate.connection.url", databaseUrl,
+            "hibernate.connection.username", databaseUsername,
+            "hibernate.connection.password", databasePassword
+        ));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (ENTITY_MANAGER_FACTORY == null || !ENTITY_MANAGER_FACTORY.isOpen()) return;

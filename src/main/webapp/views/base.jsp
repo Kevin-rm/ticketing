@@ -6,11 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <layout:block name="title">Ticketing</layout:block>
-    </title>
-    <layout:block name="styles"/>
+    <title><layout:block name="title">Ticketing</layout:block></title>
     <link rel="stylesheet" href="<c:url value="/public/assets/css/bootstrap.min.css"/>">
+    <layout:block name="styles"/>
 </head>
 <body>
     <layout:block name="body"/>
