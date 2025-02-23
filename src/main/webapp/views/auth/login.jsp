@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="layout" uri="http://www.matsd.mg/javaframework/tags/template-inheritance" %>
+<%@ taglib prefix="helper" uri="http://www.matsd.mg/javaframework/tags/jsp-helpers" %>
 
 <layout:extends file="_layout">
     <layout:put block="form-title">
@@ -10,24 +11,37 @@
     <layout:put block="form-content">
         <jsp:useBean id="l" scope="request" type="mg.itu.ticketing.request.LoginRequest"/>
         <form action="<c:url value="/connexion"/>" method="post">
+            <c:set var="emailErrors" value="${helper:fieldErrors('l.email')}"/>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input id="email"
                        type="email"
-                       class="form-control"
+                       class="form-control ${not empty emailErrors ? "is-invalid" : ""}"
                        name="l.email"
                        value="${l.email}"
                        placeholder="Votre adresse e-mail"
                        required>
+                <c:if test="${not empty emailErrors}">
+                    <div class="invalid-feedback">
+                        <c:out value="${emailErrors[0].message}"/>
+                    </div>
+                </c:if>
             </div>
+
+            <c:set var="passwordErrors" value="${helper:fieldErrors('l.password')}"/>
             <div class="mb-4">
                 <label for="password" class="form-label">Mot de passe</label>
                 <input id="password"
                        type="password"
-                       class="form-control"
+                       class="form-control ${not empty passwordErrors ? "is-invalid" : ""}"
                        name="l.password"
                        placeholder="Votre mot de passe"
                        required>
+                <c:if test="${not empty passwordErrors}">
+                    <div class="invalid-feedback">
+                        <c:out value="${passwordErrors[0].message}"/>
+                    </div>
+                </c:if>
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-3">
                 Se connecter

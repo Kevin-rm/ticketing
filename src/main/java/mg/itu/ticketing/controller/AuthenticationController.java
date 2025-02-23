@@ -35,8 +35,12 @@ public class AuthenticationController {
         ModelBindingResult modelBindingResult,
         RedirectData redirectData
     ) {
-        if (modelBindingResult.hasErrors())
+        if (modelBindingResult.hasErrors()) {
+            redirectData.addAll(modelBindingResult.getFieldErrorsMap());
+            redirectData.add("l", request);
+
             return "redirect:/connexion";
+        }
 
         try {
             AuthFacade.login(request.getEmail(), request.getPassword());

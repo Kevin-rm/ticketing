@@ -25,8 +25,9 @@ public class RoleService {
     @Nullable
     public Role getByValue(final String value, final EntityManager entityManager) {
         try {
-            return entityManager.createQuery("SELECT r FROM Role r WHERE r.value = :value", Role.class)
-                .setParameter("value", value).getSingleResult();
+            return entityManager.createQuery("SELECT r FROM Role r WHERE UPPER(r.value) = UPPER(:value)", Role.class)
+                .setParameter("value", value)
+                .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
