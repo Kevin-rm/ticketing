@@ -68,8 +68,12 @@ public class AuthenticationController {
         RedirectData redirectData,
         UserService userService
     ) {
-        if (modelBindingResult.hasErrors())
+        if (modelBindingResult.hasErrors()) {
+            redirectData.addAll(modelBindingResult.getFieldErrorsMap());
+            redirectData.add("r", request);
+
             return "redirect:/inscription";
+        }
 
         try {
             userService.insert(request);
@@ -79,6 +83,7 @@ public class AuthenticationController {
         } catch (Exception e) {
             log.error("Erreur lors d'une inscription d'un utilisateur", e);
             redirectData.add("error", "Erreur lors de l'inscription");
+            redirectData.add("r", request);
 
             return "redirect:/inscription";
         }
