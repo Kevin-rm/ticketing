@@ -4,7 +4,7 @@
 <layout:extends file="/views/base">
     <layout:put block="body">
         <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
-            <div class="card shadow-lg" style="max-width: 400px; width: 100%;">
+            <div class="card shadow-sm" style="max-width: 400px; width: 100%;">
                 <div class="card-body p-4">
                     <layout:block name="form-title"/>
 
