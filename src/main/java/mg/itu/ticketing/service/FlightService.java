@@ -1,19 +1,24 @@
 package mg.itu.ticketing.service;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.matsd.javaframework.core.annotations.Component;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Component
 public class FlightService {
-    private final CityService cityService;
+    private final CityService  cityService;
     private final PlaneService planeService;
 
     public List<Flight> getAll(final EntityManager entityManager) {
@@ -44,28 +49,29 @@ public class FlightService {
     }
 
     public List<Flight> search(final FlightSearchRequest request, final EntityManager entityManager) {
-        String sql = """
-            SELECT f
-            FROM Flight f 
-            WHERE (:departureCityId IS NULL OR f.departureCity.id = :departureCityId) AND 
-                  (:arrivalCityId   IS NULL OR f.arrivalCity.id = :arrivalCityId)
-        """;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Flight> criteriaQuery = criteriaBuilder.createQuery(Flight.class);
+        Root<Flight> root = criteriaQuery.from(Flight.class);
 
-        if (request.getDepartureTimestampMin() != null)
-            sql += " AND f.departureTimestamp >= :departureTimestampMin";
-        if (request.getDepartureTimestampMax() != null)
-            sql += " AND f.departureTimestamp <= :departureTimestampMax";
+        List<Predicate> predicates = new ArrayList<>();
 
-        TypedQuery<Flight> typedQuery = entityManager.createQuery(sql, Flight.class)
-            .setParameter("departureCityId", request.getDepartureCityId())
-            .setParameter("arrivalCityId", request.getArrivalCityId());
+        final Integer departureCityId = request.getDepartureCityId();
+        final Integer arrivalCityId   = request.getArrivalCityId();
+        final LocalDateTime minDepartureTimestamp = request.getMinDepartureTimestamp();
+        final LocalDateTime maxDepartureTimestamp = request.getMaxDepartureTimestamp();
 
-        if (request.getDepartureTimestampMin() != null)
-            typedQuery.setParameter("departureTimestampMin", request.getDepartureTimestampMin());
-        if (request.getDepartureTimestampMax() != null)
-            typedQuery.setParameter("departureTimestampMax", request.getDepartureTimestampMax());
+        if (departureCityId != null)
+            predicates.add(criteriaBuilder.equal(root.get("departureCity").get("id"), departureCityId));
+        if (arrivalCityId != null)
+            predicates.add(criteriaBuilder.equal(root.get("arrivalCity").get("id"), arrivalCityId));
+        if (minDepartureTimestamp != null)
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("departureTimestamp"), minDepartureTimestamp));
+        if (maxDepartureTimestamp != null)
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("departureTimestamp"), maxDepartureTimestamp));
 
-        return typedQuery.getResultList();
+        return entityManager.createQuery(criteriaQuery.where(
+            predicates.toArray(new Predicate[0])
+        )).getResultList();
     }
 
     private Flight populateFromRequest(

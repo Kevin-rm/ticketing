@@ -43,6 +43,8 @@ public class AuthenticationController {
             return AuthFacade.getCurrentUser().hasRole("ADMIN") ? "redirect:/admin" : "redirect:/";
         } catch (InvalidCredentialsException e) {
             redirectData.add("error", e.getMessage());
+            redirectData.add("l", request);
+
             return "redirect:/connexion";
         }
     }
