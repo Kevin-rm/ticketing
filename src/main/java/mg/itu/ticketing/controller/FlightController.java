@@ -8,7 +8,9 @@ import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
+import mg.itu.ticketing.service.CityService;
 import mg.itu.ticketing.service.FlightService;
+import mg.itu.ticketing.service.PlaneService;
 import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
@@ -21,6 +23,8 @@ public class FlightController {
     private static final String BACKOFFICE_URL_PREFIX = "/backoffice/vols";
 
     private final FlightService flightService;
+    private final CityService   cityService;
+    private final PlaneService  planeService;
 
     @Authorize("ADMIN")
     @Get(BACKOFFICE_URL_PREFIX)
@@ -37,13 +41,41 @@ public class FlightController {
     @Authorize("ADMIN")
     @Get(BACKOFFICE_URL_PREFIX + "/creer")
     public String create(Model model) {
+        DatabaseUtils.execute(entityManager ->
+            model.addData("f", new FlightRequest())
+                .addData("cities", cityService.getAll(entityManager))
+                .addData("planes", planeService.getAll(entityManager))
+        );
+
         return BACKOFFICE_VIEWS_PATH + "form";
     }
 
     @Authorize("ADMIN")
     @Post(BACKOFFICE_URL_PREFIX + "/creer")
-    public String store() {
-        return "redirect:" + BACKOFFICE_URL_PREFIX;
+    public String store(
+        @Validate @ModelData("f") FlightRequest flightRequest,
+        ModelBindingResult modelBindingResult,
+        RedirectData redirectData
+    ) {
+        try {
+            if (modelBindingResult.hasErrors()) {
+                redirectData.addAll(modelBindingResult.getFieldErrorsMap());
+                redirectData.add("f", flightRequest);
+
+                return String.format("redirect:%s/creer", BACKOFFICE_URL_PREFIX);
+            }
+
+            DatabaseUtils.executeTransactional(entityManager -> flightService.insert(flightRequest, entityManager));
+            redirectData.add("success", "Vol créé avec succès");
+
+            return "redirect:" + BACKOFFICE_URL_PREFIX;
+        } catch (Exception e) {
+            log.error("Erreur lors de la création d'un vol", e);
+            redirectData.add("error", "Erreur lors de la création de vol");
+            redirectData.add("f", flightRequest);
+
+            return String.format("redirect:%s/creer", BACKOFFICE_URL_PREFIX);
+        }
     }
 
     @Authorize("ADMIN")
@@ -52,6 +84,8 @@ public class FlightController {
         DatabaseUtils.execute(entityManager ->
             model.addData("f", FlightRequest.fromFlight(flightService.getById(id, entityManager)))
                 .addData("id", id)
+                .addData("cities", cityService.getAll(entityManager))
+                .addData("planes", planeService.getAll(entityManager))
         );
 
         return BACKOFFICE_VIEWS_PATH + "form";
