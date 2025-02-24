@@ -7,8 +7,10 @@ import mg.itu.prom16.base.Model;
 import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
 import mg.itu.ticketing.request.FlightRequest;
+import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.itu.ticketing.service.FlightService;
 import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
@@ -20,29 +22,42 @@ public class FlightController {
 
     private final FlightService flightService;
 
+    @Authorize("ADMIN")
     @Get(BACKOFFICE_URL_PREFIX)
-    public String index(Model model) {
+    public String index(
+        Model model,
+        @ModelData("f") FlightSearchRequest flightSearchRequest
+    ) {
         DatabaseUtils.execute(entityManager ->
-            model.addData("flights", flightService.getAll(entityManager)));
+            model.addData("flights", flightService.search(flightSearchRequest, entityManager)));
 
         return BACKOFFICE_VIEWS_PATH + "list";
     }
 
+    @Authorize("ADMIN")
     @Get(BACKOFFICE_URL_PREFIX + "/creer")
     public String create(Model model) {
         return BACKOFFICE_VIEWS_PATH + "form";
     }
 
+    @Authorize("ADMIN")
     @Post(BACKOFFICE_URL_PREFIX + "/creer")
     public String store() {
         return "redirect:" + BACKOFFICE_URL_PREFIX;
     }
 
+    @Authorize("ADMIN")
     @Get(BACKOFFICE_URL_PREFIX + "/{id}/modifier")
     public String edit(@PathVariable Integer id, Model model) {
+        DatabaseUtils.execute(entityManager ->
+            model.addData("f", FlightRequest.fromFlight(flightService.getById(id, entityManager)))
+                .addData("id", id)
+        );
+
         return BACKOFFICE_VIEWS_PATH + "form";
     }
 
+    @Authorize("ADMIN")
     @Post(BACKOFFICE_URL_PREFIX + "/{id}/modifier")
     public String update(
         @PathVariable Integer id,
@@ -69,6 +84,7 @@ public class FlightController {
         return String.format("redirect:%s/%d/modifier", BACKOFFICE_URL_PREFIX, id);
     }
 
+    @Authorize("ADMIN")
     @Post(BACKOFFICE_URL_PREFIX + "/supprimer/{id}")
     public String delete(@PathVariable Integer id, RedirectData redirectData) {
         try {
