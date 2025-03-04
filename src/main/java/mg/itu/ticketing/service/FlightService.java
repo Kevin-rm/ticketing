@@ -21,11 +21,6 @@ public class FlightService {
     private final CityService  cityService;
     private final PlaneService planeService;
 
-    public List<Flight> getAll(final EntityManager entityManager) {
-        return entityManager.createQuery("SELECT f FROM Flight f", Flight.class)
-            .getResultList();
-    }
-
     public Flight getById(final Integer id, final EntityManager entityManager) {
         Flight flight = entityManager.find(Flight.class, id);
         if (flight == null)

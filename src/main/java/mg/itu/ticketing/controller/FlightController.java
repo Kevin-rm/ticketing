@@ -12,7 +12,6 @@ import mg.itu.ticketing.service.CityService;
 import mg.itu.ticketing.service.FlightService;
 import mg.itu.ticketing.service.PlaneService;
 import mg.itu.ticketing.utils.DatabaseUtils;
-import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
@@ -26,11 +25,10 @@ public class FlightController {
     private final CityService   cityService;
     private final PlaneService  planeService;
 
-    @Authorize("ADMIN")
-    @Get(BACKOFFICE_URL_PREFIX)
+    // @Authorize("ADMIN")
+    @Get("/backoffice/vols")
     public String index(
-        Model model,
-        @ModelData("f") FlightSearchRequest flightSearchRequest
+        Model model, @Validate @ModelData("f") FlightSearchRequest flightSearchRequest
     ) {
         DatabaseUtils.execute(entityManager ->
             model.addData("flights", flightService.search(flightSearchRequest, entityManager)));
@@ -38,8 +36,8 @@ public class FlightController {
         return BACKOFFICE_VIEWS_PATH + "list";
     }
 
-    @Authorize("ADMIN")
-    @Get(BACKOFFICE_URL_PREFIX + "/creer")
+    // @Authorize("ADMIN")
+    @Get("/backoffice/vols/creer")
     public String create(Model model) {
         DatabaseUtils.execute(entityManager ->
             model.addData("f", new FlightRequest())
@@ -50,8 +48,8 @@ public class FlightController {
         return BACKOFFICE_VIEWS_PATH + "form";
     }
 
-    @Authorize("ADMIN")
-    @Post(BACKOFFICE_URL_PREFIX + "/creer")
+    // @Authorize("ADMIN")
+    @Post("/backoffice/vols/creer")
     public String store(
         @Validate @ModelData("f") FlightRequest flightRequest,
         ModelBindingResult modelBindingResult,
@@ -78,8 +76,8 @@ public class FlightController {
         }
     }
 
-    @Authorize("ADMIN")
-    @Get(BACKOFFICE_URL_PREFIX + "/{id}/modifier")
+    // @Authorize("ADMIN")
+    @Get("/backoffice/vols/{id}/modifier")
     public String edit(@PathVariable Integer id, Model model) {
         DatabaseUtils.execute(entityManager ->
             model.addData("f", FlightRequest.fromFlight(flightService.getById(id, entityManager)))
@@ -91,8 +89,8 @@ public class FlightController {
         return BACKOFFICE_VIEWS_PATH + "form";
     }
 
-    @Authorize("ADMIN")
-    @Post(BACKOFFICE_URL_PREFIX + "/{id}/modifier")
+    // @Authorize("ADMIN")
+    @Post("/backoffice/vols/{id}/modifier")
     public String update(
         @PathVariable Integer id,
         @Validate @ModelData("f")FlightRequest flightRequest,
@@ -118,8 +116,8 @@ public class FlightController {
         return String.format("redirect:%s/%d/modifier", BACKOFFICE_URL_PREFIX, id);
     }
 
-    @Authorize("ADMIN")
-    @Post(BACKOFFICE_URL_PREFIX + "/supprimer/{id}")
+    // @Authorize("ADMIN")
+    @Post("/backoffice/vols/supprimer/{id}")
     public String delete(@PathVariable Integer id, RedirectData redirectData) {
         try {
             DatabaseUtils.executeTransactional(entityManager ->
