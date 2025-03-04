@@ -39,9 +39,10 @@ public class FlightController {
     // @Authorize("ADMIN")
     @Get("/backoffice/vols/creer")
     public String create(Model model) {
+        if (!model.hasData("f")) model.addData("f", new FlightRequest());
+
         DatabaseUtils.execute(entityManager ->
-            model.addData("f", new FlightRequest())
-                .addData("cities", cityService.getAll(entityManager))
+            model.addData("cities", cityService.getAll(entityManager))
                 .addData("planes", planeService.getAll(entityManager))
         );
 
@@ -79,12 +80,14 @@ public class FlightController {
     // @Authorize("ADMIN")
     @Get("/backoffice/vols/{id}/modifier")
     public String edit(@PathVariable Integer id, Model model) {
-        DatabaseUtils.execute(entityManager ->
-            model.addData("f", FlightRequest.fromFlight(flightService.getById(id, entityManager)))
-                .addData("id", id)
+        DatabaseUtils.execute(entityManager -> {
+            if (!model.hasData("f"))
+                model.addData("f", FlightRequest.fromFlight(flightService.getById(id, entityManager)));
+
+            return model.addData("id", id)
                 .addData("cities", cityService.getAll(entityManager))
-                .addData("planes", planeService.getAll(entityManager))
-        );
+                .addData("planes", planeService.getAll(entityManager));
+        });
 
         return BACKOFFICE_VIEWS_PATH + "form";
     }
