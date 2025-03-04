@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><layout:block name="title">Ticketing</layout:block></title>
     <link rel="stylesheet" href="<c:url value="/public/assets/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/public/assets/icons/bootstrap-icons.min.css"/>">
     <layout:block name="styles"/>
 </head>
 <body>
