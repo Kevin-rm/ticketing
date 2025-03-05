@@ -120,7 +120,7 @@ public class FlightController {
     }
 
     // @Authorize("ADMIN")
-    @Post("/backoffice/vols/supprimer/{id}")
+    @Post("/backoffice/vols/{id}/supprimer")
     public String delete(@PathVariable Integer id, RedirectData redirectData) {
         try {
             DatabaseUtils.executeTransactional(entityManager ->
