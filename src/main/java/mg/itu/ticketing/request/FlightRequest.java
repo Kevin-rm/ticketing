@@ -12,9 +12,6 @@ public class FlightRequest {
     private LocalDateTime departureTimestamp;
 
     @Required
-    private LocalDateTime arrivalTimestamp;
-
-    @Required
     private Integer departureCityId;
 
     @Required
@@ -26,7 +23,6 @@ public class FlightRequest {
     public static FlightRequest fromFlight(final Flight flight) {
         FlightRequest flightRequest = new FlightRequest();
         flightRequest.setDepartureTimestamp(flight.getDepartureTimestamp());
-        flightRequest.setArrivalTimestamp(flight.getArrivalTimestamp());
         flightRequest.setDepartureCityId(flight.getDepartureCity().getId());
         flightRequest.setArrivalCityId(flight.getArrivalCity().getId());
         flightRequest.setPlaneId(flight.getPlane().getId());

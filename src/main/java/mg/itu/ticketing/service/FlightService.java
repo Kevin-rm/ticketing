@@ -73,7 +73,6 @@ public class FlightService {
         final Flight flight, final FlightRequest request, final EntityManager entityManager
     ) {
         flight.setDepartureTimestamp(request.getDepartureTimestamp());
-        flight.setArrivalTimestamp(request.getArrivalTimestamp());
         flight.setDepartureCity(cityService.getById(request.getDepartureCityId(), entityManager));
         flight.setArrivalCity(cityService.getById(request.getArrivalCityId(), entityManager));
         flight.setPlane(planeService.getById(request.getPlaneId(), entityManager));

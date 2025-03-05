@@ -15,7 +15,6 @@ CREATE TABLE flight
 (
     id                  SERIAL PRIMARY KEY,
     departure_timestamp TIMESTAMP NOT NULL,
-    arrival_timestamp   TIMESTAMP NOT NULL,
     departure_city_id   INTEGER   NOT NULL,
     arrival_city_id     INTEGER   NOT NULL,
     plane_id            INTEGER   NOT NULL,
