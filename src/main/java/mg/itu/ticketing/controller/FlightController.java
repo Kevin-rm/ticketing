@@ -28,10 +28,16 @@ public class FlightController {
     // @Authorize("ADMIN")
     @Get("/backoffice/vols")
     public String index(
-        Model model, @Validate @ModelData("f") FlightSearchRequest flightSearchRequest
+        Model model,
+        @Validate @ModelData("f") FlightSearchRequest flightSearchRequest,
+        ModelBindingResult modelBindingResult
     ) {
+        if (modelBindingResult.hasErrors())
+            model.addData(modelBindingResult.getFieldErrorsMap());
+
         DatabaseUtils.execute(entityManager ->
-            model.addData("flights", flightService.search(flightSearchRequest, entityManager)));
+            model.addData("flights", flightService.search(flightSearchRequest, entityManager))
+                .addData("cities", cityService.getAll(entityManager)));
 
         return BACKOFFICE_VIEWS_PATH + "list";
     }
