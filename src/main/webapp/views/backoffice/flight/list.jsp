@@ -57,9 +57,9 @@
                     </div>
                     <div class="col-12">
                         <div class="d-flex gap-2 justify-content-end">
-                            <button type="reset" class="btn btn-light">
+                            <a href="<c:url value="/backoffice/vols"/>" class="btn btn-light">
                                 <i class="bi bi-x-lg"></i> Réinitialiser
-                            </button>
+                            </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-search"></i> Rechercher
                             </button>
