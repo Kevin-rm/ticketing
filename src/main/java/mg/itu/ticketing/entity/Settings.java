@@ -29,6 +29,6 @@ public class Settings {
 
     @Setter
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "modified_by", nullable = false)
     private User modifiedBy;
 }

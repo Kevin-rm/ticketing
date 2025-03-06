@@ -16,7 +16,7 @@ import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
 @RequiredArgsConstructor
-@Authorize("ADMIN")
+// @Authorize("ADMIN")
 @Controller
 @RequestMapping("/backoffice/parametres")
 public class SettingsController {

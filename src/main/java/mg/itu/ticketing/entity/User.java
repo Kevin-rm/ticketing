@@ -42,6 +42,10 @@ public class User implements mg.matsd.javaframework.security.base.User {
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}))
     private List<Role> userRoles;
 
+    public String fullName() {
+        return firstname + " " + lastname;
+    }
+
     @Override
     public String getIdentifier() {
         return email;
