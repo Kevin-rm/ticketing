@@ -93,6 +93,10 @@
                             <td>${flight.plane.model}</td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
+                                    <a href="<c:url value="/backoffice/vols/${flight.id}/prix"/>"
+                                       class="btn btn-info">
+                                        <i class="bi bi-tag"></i>
+                                    </a>
                                     <a href="<c:url value="/backoffice/vols/${flight.id}/modifier"/>"
                                        class="btn btn-primary">
                                         <i class="bi bi-pencil"></i>
