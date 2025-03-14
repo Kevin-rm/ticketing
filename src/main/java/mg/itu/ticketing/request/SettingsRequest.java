@@ -20,17 +20,19 @@ public class SettingsRequest {
     private Integer minCancellationHours;
 
     @Nullable
-    private final LocalDateTime modifiedAt;
+    private LocalDateTime modifiedAt;
 
     @Nullable
-    private final String modifiedBy;
+    private String modifiedBy;
 
     public static SettingsRequest fromSettings(final Settings settings) {
         User user = settings.getModifiedBy();
 
-        SettingsRequest settingsRequest = new SettingsRequest(settings.getModifiedAt(), user == null ? null : user.fullName());
+        SettingsRequest settingsRequest = new SettingsRequest();
         settingsRequest.setMinReservationHours(settings.getMinReservationHours());
         settingsRequest.setMinCancellationHours(settings.getMinCancellationHours());
+        settingsRequest.setModifiedAt(settings.getModifiedAt());
+        settingsRequest.setModifiedBy(user == null ? null : user.fullName());
 
         return settingsRequest;
     }

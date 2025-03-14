@@ -62,14 +62,14 @@ public class FlightController {
         ModelBindingResult modelBindingResult,
         RedirectData redirectData
     ) {
+        if (modelBindingResult.hasErrors()) {
+            redirectData.addAll(modelBindingResult.getFieldErrorsMap());
+            redirectData.add("f", flightRequest);
+
+            return String.format("redirect:%s/creer", BACKOFFICE_URL_PREFIX);
+        }
+
         try {
-            if (modelBindingResult.hasErrors()) {
-                redirectData.addAll(modelBindingResult.getFieldErrorsMap());
-                redirectData.add("f", flightRequest);
-
-                return String.format("redirect:%s/creer", BACKOFFICE_URL_PREFIX);
-            }
-
             DatabaseUtils.executeTransactional(entityManager -> flightService.insert(flightRequest, entityManager));
             redirectData.add("success", "Vol créé avec succès");
 

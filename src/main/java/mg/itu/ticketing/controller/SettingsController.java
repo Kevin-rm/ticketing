@@ -24,9 +24,10 @@ public class SettingsController {
 
     @Get
     public String showForm(Model model) {
-        DatabaseUtils.execute(entityManager -> model.addData("s",
-            SettingsRequest.fromSettings(settingsService.getFirstOrNew(entityManager))
-        ));
+        if (!model.hasData("s"))
+            DatabaseUtils.execute(entityManager -> model.addData("s",
+                SettingsRequest.fromSettings(settingsService.getFirstOrNew(entityManager))
+            ));
 
         return "/views/backoffice/settings-form";
     }
@@ -40,6 +41,8 @@ public class SettingsController {
         if (modelBindingResult.hasErrors()) {
             redirectData.addAll(modelBindingResult.getFieldErrorsMap());
             redirectData.add("s", settingsRequest);
+
+            return "redirect:/backoffice/parametres";
         }
 
         try {
