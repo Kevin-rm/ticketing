@@ -111,5 +111,5 @@ CREATE TABLE _settings
     min_reservation_hours  INTEGER   NOT NULL,
     min_cancellation_hours INTEGER   NOT NULL,
     modified_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_by            INTEGER   NOT NULL REFERENCES _user (id)
+    modified_by            INTEGER REFERENCES _user (id)
 );
