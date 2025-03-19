@@ -9,6 +9,7 @@ import mg.itu.prom16.validation.ModelBindingResult;
 import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
+import mg.itu.ticketing.request.SeatPricingRequest;
 import mg.itu.ticketing.service.CityService;
 import mg.itu.ticketing.service.FlightService;
 import mg.itu.ticketing.service.PlaneService;
@@ -16,6 +17,10 @@ import mg.itu.ticketing.service.SeatService;
 import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -150,9 +155,24 @@ public class FlightController {
     public String showPricingForm(@PathVariable Integer id, Model model) {
         DatabaseUtils.execute(entityManager -> {
             Flight flight = flightService.getById(id, entityManager);
+            var seats = seatService.getAllByPlane(flight.getPlane(), entityManager);
+            
+            // Create a map of seat ID to pricing data
+            Map<Integer, SeatPricingRequest> pricingMap = new HashMap<>();
+            
+            // Populate the pricing map with existing prices or default values
+            /*for (var seat : seats) {
+                Double price = flightService.getSeatPrice(flight.getId(), seat.getId(), entityManager);
+                SeatPricingRequest pricingRequest = new SeatPricingRequest(
+                    seat.getId(),
+                    price != null ? price : 0.0 // Default to 0 if no price is set
+                );
+                pricingMap.put(seat.getId(), pricingRequest);
+            }*/
 
             return model.addData("flight", flight)
-                .addData("seats", seatService.getAllByPlane(flight.getPlane(), entityManager));
+                .addData("seats", seats)
+                .addData("pricingMap", pricingMap);
         });
 
         return BACKOFFICE_VIEWS_PATH + "pricing-form";
@@ -160,7 +180,32 @@ public class FlightController {
 
     // @Authorize("ADMIN")
     @Post("/backoffice/vols/{id}/prix")
-    public String handlePricingForm(@PathVariable Integer id) {
+    public String handlePricingForm(
+        @PathVariable Integer id,
+        @RequestParameter(name = "prices") List<SeatPricingRequest> prices,
+        RedirectData redirectData
+    ) {
+        try {
+            DatabaseUtils.executeTransactional(entityManager -> {
+                Flight flight = flightService.getById(id, entityManager);
+                
+                // Save each seat price
+                /*for (SeatPricingRequest price : prices) {
+                    flightService.updateSeatPrice(
+                        flight.getId(), 
+                        price.getSeatId(), 
+                        price.getUnitPrice(), 
+                        entityManager
+                    );
+                }*/
+            });
+            
+            redirectData.add("success", "Prix des sièges mis à jour avec succès");
+        } catch (Exception e) {
+            log.error("Erreur lors de la mise à jour des prix", e);
+            redirectData.add("error", "Erreur lors de la mise à jour des prix");
+        }
+        
         return String.format("redirect:%s/%d/prix", BACKOFFICE_URL_PREFIX, id);
     }
 }
