@@ -6,12 +6,15 @@ import mg.itu.prom16.annotations.*;
 import mg.itu.prom16.base.Model;
 import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
+import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.itu.ticketing.service.CityService;
 import mg.itu.ticketing.service.FlightService;
 import mg.itu.ticketing.service.PlaneService;
+import mg.itu.ticketing.service.SeatService;
 import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
@@ -24,6 +27,7 @@ public class FlightController {
     private final FlightService flightService;
     private final CityService   cityService;
     private final PlaneService  planeService;
+    private final SeatService   seatService;
 
     // @Authorize("ADMIN")
     @Get("/backoffice/vols")
@@ -139,5 +143,24 @@ public class FlightController {
         }
 
         return "redirect:" + BACKOFFICE_URL_PREFIX;
+    }
+
+    // @Authorize("ADMIN")
+    @Get("/backoffice/vols/{id}/prix")
+    public String showPricingForm(@PathVariable Integer id, Model model) {
+        DatabaseUtils.execute(entityManager -> {
+            Flight flight = flightService.getById(id, entityManager);
+
+            return model.addData("flight", flight)
+                .addData("seats", seatService.getAllByPlane(flight.getPlane(), entityManager));
+        });
+
+        return BACKOFFICE_VIEWS_PATH + "pricing-form";
+    }
+
+    // @Authorize("ADMIN")
+    @Post("/backoffice/vols/{id}/prix")
+    public String handlePricingForm(@PathVariable Integer id) {
+        return String.format("redirect:%s/%d/prix", BACKOFFICE_URL_PREFIX, id);
     }
 }

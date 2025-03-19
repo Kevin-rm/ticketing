@@ -12,7 +12,4 @@ public class SeatPricingRequest {
 
     @Required
     private Integer seatId;
-
-    @Required
-    private Integer flightId;
 }

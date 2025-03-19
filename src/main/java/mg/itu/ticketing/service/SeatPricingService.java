@@ -24,7 +24,7 @@ public class SeatPricingService {
         SeatPricing seatPricing = new SeatPricing();
         seatPricing.setUnitPrice(request.getUnitPrice());
         seatPricing.setSeat(seatService.getById(request.getSeatId(), entityManager));
-        seatPricing.setFlight(flightService.getById(request.getFlightId(), entityManager));
+        // seatPricing.setFlight(flightService.getById(request.getFlightId(), entityManager));
 
         entityManager.persist(seatPricing);
     }
