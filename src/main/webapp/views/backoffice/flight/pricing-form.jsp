@@ -49,9 +49,12 @@
                 <h5 class="mb-0">Prix par type de siège</h5>
             </div>
             <div class="card-body p-4">
+                <c:set var="validationErrorsMap" value="${requestScope.validationErrorsMap}"/>
+
                 <form method="post" class="row g-4">
                     <c:forEach items="${seats}" var="seat">
                         <c:set var="formattedId" value="seat_${seat.seatId()}"/>
+                        <c:set var="validationErrors" value="${validationErrorsMap[formattedId]}"/>
 
                         <div class="col-md-4">
                             <div class="card">
@@ -63,13 +66,18 @@
                                     <div class="mb-3">
                                         <label for="${formattedId}.unit-price" class="form-label fw-semibold">Prix unitaire (Ar)</label>
                                         <input type="number"
-                                               class="form-control"
+                                               class="form-control ${not empty validationErrors ? "is-invalid" : ""}"
                                                id="${formattedId}.unit-price"
                                                name="${formattedId}.unit-price"
                                                value="${seat.unitPrice()}"
                                                min="0"
                                                step="0.01"
                                                required>
+                                        <c:if test="${not empty validationErrors && validationErrors.hasConstraintViolations('unitPrice')}">
+                                            <div class="invalid-feedback">
+                                                <c:out value="${validationErrors.getConstraintViolations('unitPrice')[0].message}"/>
+                                            </div>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>

@@ -174,8 +174,8 @@ public class FlightController {
         RedirectData redirectData
     ) {
         try {
-            List<ValidationErrors<SeatPricingRequest>> validationErrors = new ArrayList<>();
-            Map<Integer, SeatPricingRequest> seatPricingRequestMap = new HashMap<>();
+            Map<String, ValidationErrors<SeatPricingRequest>> validationErrorsMap = new HashMap<>();
+            Map<Integer, SeatPricingRequest> seatsPricingRequestsMap = new HashMap<>();
             requestParameterMap.forEach((parameterName, parameterValues) -> {
                 if (!parameterName.startsWith("seat_") ||
                     !parameterName.endsWith(".unit-price") ||
@@ -184,39 +184,39 @@ public class FlightController {
                 Integer seatId = Integer.parseInt(parameterName.substring(5, parameterName.indexOf('.')));
                 SeatPricingRequest seatPricingRequest = new SeatPricingRequest(seatId, new BigDecimal(parameterValues[0]));
 
-                validationErrors.add(validator.doValidate(seatPricingRequest));
-                seatPricingRequestMap.put(seatId, seatPricingRequest);
+                ValidationErrors<SeatPricingRequest> errors = validator.doValidate(seatPricingRequest);
+                if (errors.any()) validationErrorsMap.put("seat_" + seatId, errors);
+
+                seatsPricingRequestsMap.put(seatId, seatPricingRequest);
             });
 
-            if (!validationErrors.isEmpty()) {
-                redirectData.add("validationErrors", validationErrors);
+            if (!validationErrorsMap.isEmpty()) {
+                redirectData.add("validationErrorsMap", validationErrorsMap);
 
                 return String.format("redirect:%s/%d/prix", BACKOFFICE_URL_PREFIX, id);
             }
 
             DatabaseUtils.executeTransactional(entityManager -> {
-                List<Seat> seats = seatService.getByIds(seatPricingRequestMap.keySet(), entityManager);
-                Map<Integer, Seat> seatMap = Collections.unmodifiableMap(seats.stream()
-                    .collect(Collectors.toMap(Seat::getId, Function.identity())
-                ));
+                final List<Seat> seats = seatService.getByIds(seatsPricingRequestsMap.keySet(), entityManager);
+                final Flight flight = flightService.getById(id, entityManager);
 
-                Flight flight = flightService.getById(id, entityManager);
                 seatPricingService.getByFlightAndSeats(flight, seats, entityManager)
                     .forEach(sp -> {
                         final Integer seatId = sp.getSeat().getId();
-                        final SeatPricingRequest request = seatPricingRequestMap.get(seatId);
-                        if (request == null) return;
 
-                        sp.setUnitPrice(request.unitPrice());
+                        sp.setUnitPrice(seatsPricingRequestsMap.get(seatId).unitPrice());
                         seatPricingService.save(sp, entityManager);
 
-                        seatPricingRequestMap.remove(seatId);
+                        seatsPricingRequestsMap.remove(seatId);
                     });
 
-                seatPricingRequestMap.forEach((seatId, request) -> {
+                final Map<Integer, Seat> seatsMap = Collections.unmodifiableMap(seats.stream()
+                    .collect(Collectors.toMap(Seat::getId, Function.identity())
+                ));
+                seatsPricingRequestsMap.forEach((seatId, request) -> {
                     SeatPricing seatPricing = new SeatPricing();
                     seatPricing.setUnitPrice(request.unitPrice());
-                    seatPricing.setSeat(seatMap.get(seatId));
+                    seatPricing.setSeat(seatsMap.get(seatId));
                     seatPricing.setFlight(flight);
 
                     seatPricingService.save(seatPricing, entityManager);
