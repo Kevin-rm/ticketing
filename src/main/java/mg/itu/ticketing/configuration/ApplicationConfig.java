@@ -17,8 +17,11 @@ public class ApplicationConfig {
     }
 
     @ManagedInstance
-    public AuthenticationManager authenticationManager(UserProvider entityUserProvider, PasswordHasher passwordHasher) {
-        return new AuthenticationManager(entityUserProvider, passwordHasher);
+    public AuthenticationManager authenticationManager(UserProvider userService, PasswordHasher passwordHasher) {
+        AuthenticationManager authenticationManager = new AuthenticationManager(userService, passwordHasher);
+        authenticationManager.useDefaultStatefulStorageKey();
+
+        return authenticationManager;
     }
 
     @ManagedInstance

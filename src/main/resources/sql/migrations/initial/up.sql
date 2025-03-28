@@ -15,7 +15,6 @@ CREATE TABLE flight
 (
     id                  SERIAL PRIMARY KEY,
     departure_timestamp TIMESTAMP NOT NULL,
-    arrival_timestamp   TIMESTAMP NOT NULL,
     departure_city_id   INTEGER   NOT NULL,
     arrival_city_id     INTEGER   NOT NULL,
     plane_id            INTEGER   NOT NULL,
@@ -80,8 +79,9 @@ CREATE TABLE seat_pricing
 CREATE TABLE reservation
 (
     id        SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id   INTEGER   NOT NULL,
+    status    VARCHAR(9) NOT NULL,
+    timestamp TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id   INTEGER    NOT NULL,
     FOREIGN KEY (user_id) REFERENCES _user (id)
 );
 
@@ -111,5 +111,5 @@ CREATE TABLE _settings
     min_reservation_hours  INTEGER   NOT NULL,
     min_cancellation_hours INTEGER   NOT NULL,
     modified_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_by            INTEGER   NOT NULL REFERENCES _user (id)
+    modified_by            INTEGER REFERENCES _user (id)
 );

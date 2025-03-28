@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"seat_id", "flight_id"}))
 public class SeatPricing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
