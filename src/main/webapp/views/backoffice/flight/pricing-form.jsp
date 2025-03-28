@@ -12,8 +12,7 @@
         </div>
 
         <jsp:useBean id="flight" scope="request" type="mg.itu.ticketing.entity.Flight"/>
-        <jsp:useBean id="seats" scope="request" type="java.util.List<mg.itu.ticketing.entity.Seat>"/>
-        <jsp:useBean id="pricingMap" scope="request" type="java.util.Map<java.lang.Integer, mg.itu.ticketing.request.SeatPricingRequest>"/>
+        <jsp:useBean id="seats" scope="request" type="java.util.List<mg.itu.ticketing.dto.SeatWithPricingDTO>"/>
         
         <div class="card shadow-sm mb-4">
             <div class="card-header">
@@ -47,29 +46,31 @@
 
         <div class="card shadow-sm">
             <div class="card-header">
-                <h5 class="mb-0">Configuration des prix par type de siège</h5>
+                <h5 class="mb-0">Prix par type de siège</h5>
             </div>
             <div class="card-body p-4">
                 <form method="post" class="row g-4">
                     <c:forEach items="${seats}" var="seat">
+                        <c:set var="seatId" value="${seat.seatId()}"/>
+                        <c:set var="seatTypeDesignation" value="${seat.seatTypeDesignation()}"/>
+
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    <h6 class="mb-0">${seat.seatType.designation}</h6>
+                                    <h6 class="mb-0">${seatTypeDesignation}</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p class="mb-2">Nombre de sièges disponibles: ${seat.seatsCount}</p>
+                                    <p class="mb-2">Nombre de sièges disponibles: ${seat.seatsCount()}</p>
                                     <div class="mb-3">
-                                        <label for="price-${seat.id}" class="form-label fw-semibold">Prix unitaire (Ar)</label>
+                                        <label for="${seatTypeDesignation}-${seatId}.unit-price" class="form-label fw-semibold">Prix unitaire (Ar)</label>
                                         <input type="number"
                                                class="form-control"
-                                               id="price-${seat.id}"
-                                               name="prices[${seat.id}].unitPrice"
-                                               value="${pricingMap[seat.id].unitPrice}"
+                                               id="price-${seatTypeDesignation}"
+                                               name="${seatTypeDesignation}-${seatId}.unit-price"
+                                               value="${seat.unitPrice()}"
                                                min="0"
                                                step="0.01"
                                                required>
-                                        <input type="hidden" name="prices[${seat.id}].seatId" value="${seat.id}">
                                     </div>
                                 </div>
                             </div>

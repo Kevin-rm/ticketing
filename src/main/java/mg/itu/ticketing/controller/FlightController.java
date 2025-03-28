@@ -10,10 +10,7 @@ import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.itu.ticketing.request.SeatPricingRequest;
-import mg.itu.ticketing.service.CityService;
-import mg.itu.ticketing.service.FlightService;
-import mg.itu.ticketing.service.PlaneService;
-import mg.itu.ticketing.service.SeatService;
+import mg.itu.ticketing.service.*;
 import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
@@ -155,24 +152,9 @@ public class FlightController {
     public String showPricingForm(@PathVariable Integer id, Model model) {
         DatabaseUtils.execute(entityManager -> {
             Flight flight = flightService.getById(id, entityManager);
-            var seats = seatService.getAllByPlane(flight.getPlane(), entityManager);
-            
-            // Create a map of seat ID to pricing data
-            Map<Integer, SeatPricingRequest> pricingMap = new HashMap<>();
-            
-            // Populate the pricing map with existing prices or default values
-            /*for (var seat : seats) {
-                Double price = flightService.getSeatPrice(flight.getId(), seat.getId(), entityManager);
-                SeatPricingRequest pricingRequest = new SeatPricingRequest(
-                    seat.getId(),
-                    price != null ? price : 0.0 // Default to 0 if no price is set
-                );
-                pricingMap.put(seat.getId(), pricingRequest);
-            }*/
 
             return model.addData("flight", flight)
-                .addData("seats", seats)
-                .addData("pricingMap", pricingMap);
+                .addData("seats", seatService.getAllWithPricingByFlight(id, flight, entityManager));
         });
 
         return BACKOFFICE_VIEWS_PATH + "pricing-form";
@@ -182,21 +164,24 @@ public class FlightController {
     @Post("/backoffice/vols/{id}/prix")
     public String handlePricingForm(
         @PathVariable Integer id,
-        @RequestParameter(name = "prices") List<SeatPricingRequest> prices,
+        @RequestParameter Map<String, String> requestParams,
         RedirectData redirectData
     ) {
         try {
             DatabaseUtils.executeTransactional(entityManager -> {
                 Flight flight = flightService.getById(id, entityManager);
                 
-                // Save each seat price
-                /*for (SeatPricingRequest price : prices) {
-                    flightService.updateSeatPrice(
-                        flight.getId(), 
-                        price.getSeatId(), 
-                        price.getUnitPrice(), 
-                        entityManager
-                    );
+                // Process each seat price from the request parameters
+                /*for (Map.Entry<String, String> entry : requestParams.entrySet()) {
+                    String paramName = entry.getKey();
+                    if (paramName.startsWith("price_") && !entry.getValue().isEmpty()) {
+                        // Extract seat ID from parameter name (price_123 -> 123)
+                        Integer seatId = Integer.parseInt(paramName.substring(6));
+                        Double price = Double.parseDouble(entry.getValue());
+                        
+                        // Update the seat price
+                        flightService.updateSeatPrice(flight.getId(), seatId, price, entityManager);
+                    }
                 }*/
             });
             
