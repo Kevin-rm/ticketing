@@ -174,8 +174,8 @@ public class FlightController {
         RedirectData redirectData
     ) {
         try {
-            Map<String, ValidationErrors<SeatPricingRequest>> validationErrorsMap = new HashMap<>();
-            Map<Integer, SeatPricingRequest> seatsPricingRequestsMap = new HashMap<>();
+            final Map<String, ValidationErrors<SeatPricingRequest>> validationErrorsMap = new HashMap<>();
+            final Map<Integer, SeatPricingRequest> seatsPricingRequestsMap = new HashMap<>();
             requestParameterMap.forEach((parameterName, parameterValues) -> {
                 if (!parameterName.startsWith("seat_") ||
                     !parameterName.endsWith(".unit-price") ||
