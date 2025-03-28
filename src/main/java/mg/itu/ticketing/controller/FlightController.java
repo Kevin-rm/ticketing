@@ -7,17 +7,21 @@ import mg.itu.prom16.base.Model;
 import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
 import mg.itu.ticketing.entity.Flight;
+import mg.itu.ticketing.entity.Seat;
+import mg.itu.ticketing.entity.SeatPricing;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.itu.ticketing.request.SeatPricingRequest;
 import mg.itu.ticketing.service.*;
 import mg.itu.ticketing.utils.DatabaseUtils;
-import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
+import mg.matsd.javaframework.validation.base.ValidationErrors;
+import mg.matsd.javaframework.validation.base.Validator;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class FlightController {
     private final CityService   cityService;
     private final PlaneService  planeService;
     private final SeatService   seatService;
+    private final SeatPricingService seatPricingService;
 
     // @Authorize("ADMIN")
     @Get("/backoffice/vols")
@@ -164,25 +169,58 @@ public class FlightController {
     @Post("/backoffice/vols/{id}/prix")
     public String handlePricingForm(
         @PathVariable Integer id,
-        @RequestParameter Map<String, String> requestParams,
+        @RequestParameter Map<String, String[]> requestParameterMap,
+        Validator validator,
         RedirectData redirectData
     ) {
         try {
+            List<ValidationErrors<SeatPricingRequest>> validationErrors = new ArrayList<>();
+            Map<Integer, SeatPricingRequest> seatPricingRequestMap = new HashMap<>();
+            requestParameterMap.forEach((parameterName, parameterValues) -> {
+                if (!parameterName.startsWith("seat_") ||
+                    !parameterName.endsWith(".unit-price") ||
+                    parameterValues.length == 0) return;
+
+                Integer seatId = Integer.parseInt(parameterName.substring(5, parameterName.indexOf('.')));
+                SeatPricingRequest seatPricingRequest = new SeatPricingRequest(seatId, new BigDecimal(parameterValues[0]));
+
+                validationErrors.add(validator.doValidate(seatPricingRequest));
+                seatPricingRequestMap.put(seatId, seatPricingRequest);
+            });
+
+            if (!validationErrors.isEmpty()) {
+                redirectData.add("validationErrors", validationErrors);
+
+                return String.format("redirect:%s/%d/prix", BACKOFFICE_URL_PREFIX, id);
+            }
+
             DatabaseUtils.executeTransactional(entityManager -> {
+                List<Seat> seats = seatService.getByIds(seatPricingRequestMap.keySet(), entityManager);
+                Map<Integer, Seat> seatMap = Collections.unmodifiableMap(seats.stream()
+                    .collect(Collectors.toMap(Seat::getId, Function.identity())
+                ));
+
                 Flight flight = flightService.getById(id, entityManager);
-                
-                // Process each seat price from the request parameters
-                /*for (Map.Entry<String, String> entry : requestParams.entrySet()) {
-                    String paramName = entry.getKey();
-                    if (paramName.startsWith("price_") && !entry.getValue().isEmpty()) {
-                        // Extract seat ID from parameter name (price_123 -> 123)
-                        Integer seatId = Integer.parseInt(paramName.substring(6));
-                        Double price = Double.parseDouble(entry.getValue());
-                        
-                        // Update the seat price
-                        flightService.updateSeatPrice(flight.getId(), seatId, price, entityManager);
-                    }
-                }*/
+                seatPricingService.getByFlightAndSeats(flight, seats, entityManager)
+                    .forEach(sp -> {
+                        final Integer seatId = sp.getSeat().getId();
+                        final SeatPricingRequest request = seatPricingRequestMap.get(seatId);
+                        if (request == null) return;
+
+                        sp.setUnitPrice(request.unitPrice());
+                        seatPricingService.save(sp, entityManager);
+
+                        seatPricingRequestMap.remove(seatId);
+                    });
+
+                seatPricingRequestMap.forEach((seatId, request) -> {
+                    SeatPricing seatPricing = new SeatPricing();
+                    seatPricing.setUnitPrice(request.unitPrice());
+                    seatPricing.setSeat(seatMap.get(seatId));
+                    seatPricing.setFlight(flight);
+
+                    seatPricingService.save(seatPricing, entityManager);
+                });
             });
             
             redirectData.add("success", "Prix des sièges mis à jour avec succès");

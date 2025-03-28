@@ -1,15 +1,11 @@
 package mg.itu.ticketing.request;
 
-import lombok.Data;
 import mg.matsd.javaframework.validation.constraints.basic.Required;
+import mg.matsd.javaframework.validation.constraints.number.Positive;
 
 import java.math.BigDecimal;
 
-@Data
-public class SeatPricingRequest {
-    @Required
-    private BigDecimal unitPrice;
-
-    @Required
-    private Integer seatId;
-}
+public record SeatPricingRequest(
+    @Required Integer seatId,
+    @Required @Positive BigDecimal unitPrice
+) { }

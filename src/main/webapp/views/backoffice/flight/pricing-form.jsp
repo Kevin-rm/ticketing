@@ -51,22 +51,21 @@
             <div class="card-body p-4">
                 <form method="post" class="row g-4">
                     <c:forEach items="${seats}" var="seat">
-                        <c:set var="seatId" value="${seat.seatId()}"/>
-                        <c:set var="seatTypeDesignation" value="${seat.seatTypeDesignation()}"/>
+                        <c:set var="formattedId" value="seat_${seat.seatId()}"/>
 
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    <h6 class="mb-0">${seatTypeDesignation}</h6>
+                                    <h6 class="mb-0">${seat.seatTypeDesignation()}</h6>
                                 </div>
                                 <div class="card-body">
                                     <p class="mb-2">Nombre de sièges disponibles: ${seat.seatsCount()}</p>
                                     <div class="mb-3">
-                                        <label for="${seatTypeDesignation}-${seatId}.unit-price" class="form-label fw-semibold">Prix unitaire (Ar)</label>
+                                        <label for="${formattedId}.unit-price" class="form-label fw-semibold">Prix unitaire (Ar)</label>
                                         <input type="number"
                                                class="form-control"
-                                               id="price-${seatTypeDesignation}"
-                                               name="${seatTypeDesignation}-${seatId}.unit-price"
+                                               id="${formattedId}.unit-price"
+                                               name="${formattedId}.unit-price"
                                                value="${seat.unitPrice()}"
                                                min="0"
                                                step="0.01"

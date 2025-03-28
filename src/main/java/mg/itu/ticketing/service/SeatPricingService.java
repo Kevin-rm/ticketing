@@ -2,15 +2,18 @@ package mg.itu.ticketing.service;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import mg.itu.ticketing.entity.Flight;
+import mg.itu.ticketing.entity.Seat;
 import mg.itu.ticketing.entity.SeatPricing;
-import mg.itu.ticketing.request.SeatPricingRequest;
 import mg.matsd.javaframework.core.annotations.Component;
+import mg.matsd.javaframework.core.utils.Assert;
+
+import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
 public class SeatPricingService {
-    private final SeatService seatService;
-    private final FlightService flightService;
 
     public SeatPricing getById(final Integer id, final EntityManager entityManager) {
         SeatPricing seatPricing = entityManager.find(SeatPricing.class, id);
@@ -20,12 +23,24 @@ public class SeatPricingService {
         return seatPricing;
     }
 
-    public void insert(final SeatPricingRequest request, final EntityManager entityManager) {
-        SeatPricing seatPricing = new SeatPricing();
-        seatPricing.setUnitPrice(request.getUnitPrice());
-        seatPricing.setSeat(seatService.getById(request.getSeatId(), entityManager));
-        // seatPricing.setFlight(flightService.getById(request.getFlightId(), entityManager));
+    public void save(final SeatPricing seatPricing, final EntityManager entityManager) {
+        Assert.notNull(seatPricing);
 
-        entityManager.persist(seatPricing);
+        if (entityManager.contains(seatPricing))
+             entityManager.merge(seatPricing);
+        else entityManager.persist(seatPricing);
+    }
+
+    public List<SeatPricing> getByFlightAndSeats(
+        final Flight flight, final Collection<Seat> seats, final EntityManager entityManager
+    ) {
+        return entityManager.createQuery("""
+            SELECT sp 
+            FROM SeatPricing sp 
+            WHERE sp.flight = :flight AND sp.seat IN :seats
+        """, SeatPricing.class)
+            .setParameter("flight", flight)
+            .setParameter("seats", seats)
+            .getResultList();
     }
 }
