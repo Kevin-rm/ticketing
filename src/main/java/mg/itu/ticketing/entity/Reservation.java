@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import mg.itu.ticketing.enums.ReservationStatus;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@ToString
 @Entity
 @DynamicInsert
 public class Reservation {

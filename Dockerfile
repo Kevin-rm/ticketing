@@ -14,6 +14,8 @@ RUN ./mvnw clean package -DskipTests -Dmaven.javadoc.skip=true
 
 FROM tomcat:10.1-jdk21
 WORKDIR /usr/local/tomcat
+
 COPY --from=build /app/target/ticketing-1.0-SNAPSHOT.war webapps/ticketing.war
+
 EXPOSE 8080
 CMD ["catalina.sh", "run"]

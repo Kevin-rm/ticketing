@@ -3,10 +3,12 @@ package mg.itu.ticketing.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 @Entity
 public class Flight {
     @Id
