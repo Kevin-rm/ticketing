@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "_user")
 public class User implements mg.matsd.javaframework.security.base.User {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

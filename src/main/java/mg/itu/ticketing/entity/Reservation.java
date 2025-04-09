@@ -3,8 +3,8 @@ package mg.itu.ticketing.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import mg.itu.ticketing.enums.ReservationStatus;
 import lombok.ToString;
+import mg.itu.ticketing.enums.ReservationStatus;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
