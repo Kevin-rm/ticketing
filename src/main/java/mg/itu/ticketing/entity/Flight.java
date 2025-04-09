@@ -20,10 +20,6 @@ public class Flight {
     private LocalDateTime departureTimestamp;
 
     @Setter
-    @Column(nullable = false)
-    private LocalDateTime arrivalTimestamp;
-
-    @Setter
     @ManyToOne
     @JoinColumn(nullable = false)
     private City departureCity;
