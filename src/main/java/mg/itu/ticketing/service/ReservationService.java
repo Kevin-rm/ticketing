@@ -15,6 +15,12 @@ import java.util.List;
 public class ReservationService {
     private final SeatPricingService seatPricingService;
 
+    public List<Reservation> getAllByUser(final User user, final EntityManager entityManager) {
+        return entityManager.createQuery("SELECT r FROM Reservation r WHERE r.user = :user", Reservation.class)
+            .setParameter("user", user)
+            .getResultList();
+    }
+
     public void insert(
         final ReservationRequest request,
         final EntityManager entityManager,

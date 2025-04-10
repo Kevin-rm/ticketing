@@ -1,4 +1,4 @@
-package mg.itu.ticketing.controller;
+package mg.itu.ticketing.controller.backoffice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,12 +23,16 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static mg.itu.ticketing.utils.ApplicationConstants.Views.BACKOFFICE_PREFIX;
+
 @Log4j2
 @RequiredArgsConstructor
+// @Authorize("ADMIN")
 @Controller
+@RequestMapping("/backoffice/vols")
 public class FlightController {
-    private static final String BACKOFFICE_VIEWS_PATH = "/views/backoffice/flight/";
-    private static final String BACKOFFICE_URL_PREFIX = "/backoffice/vols";
+    private static final String VIEWS_PATH = BACKOFFICE_PREFIX + "flight/";
+    private static final String URL_PREFIX = "/backoffice/vols";
 
     private final FlightService flightService;
     private final CityService   cityService;
@@ -36,8 +40,7 @@ public class FlightController {
     private final SeatService   seatService;
     private final SeatPricingService seatPricingService;
 
-    // @Authorize("ADMIN")
-    @Get("/backoffice/vols")
+    @Get
     public String index(
         Model model,
         @Validate @ModelData("f") FlightSearchRequest flightSearchRequest,
@@ -50,11 +53,10 @@ public class FlightController {
             model.addData("flights", flightService.search(flightSearchRequest, entityManager))
                 .addData("cities", cityService.getAll(entityManager)));
 
-        return BACKOFFICE_VIEWS_PATH + "list";
+        return VIEWS_PATH + "list";
     }
 
-    // @Authorize("ADMIN")
-    @Get("/backoffice/vols/creer")
+    @Get("/creer")
     public String create(Model model) {
         if (!model.hasData("f")) model.addData("f", new FlightRequest());
 
@@ -63,11 +65,10 @@ public class FlightController {
                 .addData("planes", planeService.getAll(entityManager))
         );
 
-        return BACKOFFICE_VIEWS_PATH + "form";
+        return VIEWS_PATH + "form";
     }
 
-    // @Authorize("ADMIN")
-    @Post("/backoffice/vols/creer")
+    @Post("/creer")
     public String store(
         @Validate @ModelData("f") FlightRequest flightRequest,
         ModelBindingResult modelBindingResult,
@@ -77,25 +78,24 @@ public class FlightController {
             redirectData.addAll(modelBindingResult.getFieldErrorsMap());
             redirectData.add("f", flightRequest);
 
-            return String.format("redirect:%s/creer", BACKOFFICE_URL_PREFIX);
+            return String.format("redirect:%s/creer", URL_PREFIX);
         }
 
         try {
             DatabaseUtils.executeTransactional(entityManager -> flightService.insert(flightRequest, entityManager));
             redirectData.add("success", "Vol créé avec succès");
 
-            return "redirect:" + BACKOFFICE_URL_PREFIX;
+            return "redirect:" + URL_PREFIX;
         } catch (Exception e) {
             log.error("Erreur lors de la création d'un vol", e);
             redirectData.add("error", "Erreur lors de la création de vol");
             redirectData.add("f", flightRequest);
 
-            return String.format("redirect:%s/creer", BACKOFFICE_URL_PREFIX);
+            return String.format("redirect:%s/creer", URL_PREFIX);
         }
     }
 
-    // @Authorize("ADMIN")
-    @Get("/backoffice/vols/{id}/modifier")
+    @Get("/{id}/modifier")
     public String edit(@PathVariable Integer id, Model model) {
         DatabaseUtils.execute(entityManager -> {
             if (!model.hasData("f"))
@@ -106,11 +106,10 @@ public class FlightController {
                 .addData("planes", planeService.getAll(entityManager));
         });
 
-        return BACKOFFICE_VIEWS_PATH + "form";
+        return VIEWS_PATH + "form";
     }
 
-    // @Authorize("ADMIN")
-    @Post("/backoffice/vols/{id}/modifier")
+    @Post("/{id}/modifier")
     public String update(
         @PathVariable Integer id,
         @Validate @ModelData("f")FlightRequest flightRequest,
@@ -133,11 +132,10 @@ public class FlightController {
             redirectData.add("f", flightRequest);
         }
 
-        return String.format("redirect:%s/%d/modifier", BACKOFFICE_URL_PREFIX, id);
+        return String.format("redirect:%s/%d/modifier", URL_PREFIX, id);
     }
 
-    // @Authorize("ADMIN")
-    @Post("/backoffice/vols/{id}/supprimer")
+    @Post("/{id}/supprimer")
     public String delete(@PathVariable Integer id, RedirectData redirectData) {
         try {
             DatabaseUtils.executeTransactional(entityManager ->
@@ -149,11 +147,10 @@ public class FlightController {
             redirectData.add("error", "Erreur lors de la suppression de vol");
         }
 
-        return "redirect:" + BACKOFFICE_URL_PREFIX;
+        return "redirect:" + URL_PREFIX;
     }
 
-    // @Authorize("ADMIN")
-    @Get("/backoffice/vols/{id}/prix")
+    @Get("/{id}/prix")
     public String showPricingForm(@PathVariable Integer id, Model model) {
         DatabaseUtils.execute(entityManager -> {
             Flight flight = flightService.getById(id, entityManager);
@@ -162,11 +159,10 @@ public class FlightController {
                 .addData("seats", seatService.getAllWithPricingByFlight(id, flight, entityManager));
         });
 
-        return BACKOFFICE_VIEWS_PATH + "pricing-form";
+        return VIEWS_PATH + "pricing-form";
     }
 
-    // @Authorize("ADMIN")
-    @Post("/backoffice/vols/{id}/prix")
+    @Post("/{id}/prix")
     public String handlePricingForm(
         @PathVariable Integer id,
         @RequestParameter Map<String, String[]> requestParameterMap,
@@ -193,7 +189,7 @@ public class FlightController {
             if (!validationErrorsMap.isEmpty()) {
                 redirectData.add("validationErrorsMap", validationErrorsMap);
 
-                return String.format("redirect:%s/%d/prix", BACKOFFICE_URL_PREFIX, id);
+                return String.format("redirect:%s/%d/prix", URL_PREFIX, id);
             }
 
             DatabaseUtils.executeTransactional(entityManager -> {
@@ -229,6 +225,6 @@ public class FlightController {
             redirectData.add("error", "Erreur lors de la mise à jour des prix");
         }
         
-        return String.format("redirect:%s/%d/prix", BACKOFFICE_URL_PREFIX, id);
+        return String.format("redirect:%s/%d/prix", URL_PREFIX, id);
     }
 }

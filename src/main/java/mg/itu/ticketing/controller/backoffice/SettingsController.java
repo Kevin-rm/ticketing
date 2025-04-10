@@ -1,4 +1,4 @@
-package mg.itu.ticketing.controller;
+package mg.itu.ticketing.controller.backoffice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,7 +11,6 @@ import mg.itu.ticketing.entity.User;
 import mg.itu.ticketing.request.SettingsRequest;
 import mg.itu.ticketing.service.SettingsService;
 import mg.itu.ticketing.utils.DatabaseUtils;
-import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2

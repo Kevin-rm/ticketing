@@ -4,10 +4,10 @@ import mg.itu.prom16.annotations.Controller;
 import mg.itu.prom16.annotations.Get;
 
 @Controller
-public class Welcome {
+public class PublicController {
 
     @Get
-    public String hello() {
-        return "Hello World!";
+    public String home() {
+        return "/views/home";
     }
 }

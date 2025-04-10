@@ -34,35 +34,14 @@
                             </li>
                         </ul>
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                   aria-expanded="false">
-                                    <c:set var="user" value="${auth:currentUser()}"/>
-                                    <c:out value="${user.fullName}"/>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="<c:url value="/deconnexion"/>">Déconnexion</a></li>
-                                </ul>
-                            </li>
+                            <%@ include file="/views/partials/user-menu.jsp" %>
                         </ul>
                     </div>
                 </div>
             </nav>
 
             <div class="container-fluid flex-grow-1 py-4">
-                <c:if test="${not empty success}">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        ${success}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        ${error}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
+                <%@ include file="/views/partials/alert-messages.jsp" %>
 
                 <layout:block name="content"/>
             </div>
