@@ -26,7 +26,7 @@
                         </ul>
                         <ul class="navbar-nav ms-auto">
                             <c:choose>
-                                <c:when test="${auth:isUserConnected()}">
+                                <c:when test="${auth:isUserAuthenticated()()}">
                                     <%@ include file="/views/partials/user-menu.jsp" %>
                                 </c:when>
                                 <c:otherwise>
