@@ -35,7 +35,7 @@
                        type="text"
                        class="form-control ${not empty lastnameErrors ? "is-invalid" : ""}"
                        name="r.lastname"
-                       value="${r.lastName}"
+                       value="${r.lastname}"
                        placeholder="Votre nom"
                        required>
                 <c:if test="${not empty lastnameErrors}">
