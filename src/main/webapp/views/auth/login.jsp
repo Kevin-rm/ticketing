@@ -31,17 +31,22 @@
             <c:set var="passwordErrors" value="${helper:fieldErrors('l.password')}"/>
             <div class="mb-4">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input id="password"
-                       type="password"
-                       class="form-control ${not empty passwordErrors ? "is-invalid" : ""}"
-                       name="l.password"
-                       placeholder="Votre mot de passe"
-                       required>
-                <c:if test="${not empty passwordErrors}">
-                    <div class="invalid-feedback">
-                        <c:out value="${passwordErrors[0].message}"/>
-                    </div>
-                </c:if>
+                <div class="input-group">
+                    <input id="password"
+                           type="password"
+                           class="form-control ${not empty passwordErrors ? "is-invalid" : ""}"
+                           name="l.password"
+                           placeholder="Votre mot de passe"
+                           required>
+                    <button class="btn btn-outline-secondary" type="button" id="toggle-password">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <c:if test="${not empty passwordErrors}">
+                        <div class="invalid-feedback">
+                            <c:out value="${passwordErrors[0].message}"/>
+                        </div>
+                    </c:if>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-3">
                 Se connecter
