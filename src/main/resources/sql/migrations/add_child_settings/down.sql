@@ -2,7 +2,8 @@ ALTER TABLE reservation
     ADD COLUMN seat_count INTEGER;
 
 UPDATE reservation
-SET seat_count = COALESCE(adult_count, 0) + COALESCE(child_count, 0);
+SET seat_count = adult_count + child_count
+WHERE TRUE;
 
 ALTER TABLE reservation
     ALTER COLUMN seat_count SET NOT NULL;

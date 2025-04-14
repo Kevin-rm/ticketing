@@ -10,7 +10,9 @@ ALTER TABLE reservation
 ALTER TABLE reservation
     ADD COLUMN child_count INTEGER NOT NULL DEFAULT 0;
 
-UPDATE reservation SET adult_count = seat_count;
+UPDATE reservation
+SET adult_count = seat_count
+WHERE TRUE;
 
 ALTER TABLE reservation
     DROP COLUMN IF EXISTS seat_count;
