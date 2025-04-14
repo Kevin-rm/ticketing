@@ -111,7 +111,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="<c:url value="/vols/${flight.id}/reserver"/>" class="btn btn-primary w-100">
+                                    <a href="<c:url value="/reservations/vol-${flight.id}/creer"/>" class="btn btn-primary w-100">
                                         <i class="bi bi-bookmark-check"></i> Réserver
                                     </a>
                                 </div>
