@@ -112,7 +112,7 @@ public class FlightController {
     @Post("/{id}/modifier")
     public String update(
         @PathVariable Integer id,
-        @Validate @ModelData("f")FlightRequest flightRequest,
+        @Validate @ModelData("f") FlightRequest flightRequest,
         ModelBindingResult modelBindingResult,
         RedirectData redirectData
     ) {

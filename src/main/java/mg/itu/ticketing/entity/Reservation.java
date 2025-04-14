@@ -28,7 +28,11 @@ public class Reservation {
 
     @Setter
     @Column(nullable = false)
-    private Integer seatCount;
+    private Integer adultCount;
+
+    @Setter
+    @Column(nullable = false)
+    private Integer childCount;
 
     @Setter
     @ManyToOne

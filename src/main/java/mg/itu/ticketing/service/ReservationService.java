@@ -26,6 +26,9 @@ public class ReservationService {
         final User user
     ) {
         Reservation reservation = new Reservation();
+        reservation.setAdultCount(request.getAdultCount());
+        reservation.setChildCount(request.getChildCount());
+        reservation.setSeatPricing(seatPricingService.getById(request.getSeatPricingId(), entityManager));
         reservation.setUser(user);
 
         entityManager.persist(reservation);
