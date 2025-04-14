@@ -18,7 +18,7 @@
                             <option value="">Toutes les villes</option>
                             <c:forEach items="${cities}" var="city">
                                 <option value="${city.id}" ${f.departureCityId == city.id ? "selected" : ""}>
-                                        ${city.name}
+                                    ${city.name}
                                 </option>
                             </c:forEach>
                         </select>
@@ -29,7 +29,7 @@
                             <option value="">Toutes les villes</option>
                             <c:forEach items="${cities}" var="city">
                                 <option value="${city.id}" ${f.arrivalCityId == city.id ? "selected" : ""}>
-                                        ${city.name}
+                                    ${city.name}
                                 </option>
                             </c:forEach>
                         </select>
@@ -66,13 +66,13 @@
 
         <h3 class="fw-bold text-primary mb-4">Vols disponibles</h3>
 
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <jsp:useBean id="flights" scope="request" type="java.util.List<mg.itu.ticketing.entity.Flight>"/>
             <c:choose>
                 <c:when test="${not empty flights}">
                     <c:forEach items="${flights}" var="flight">
                         <div class="col">
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm">
                                 <div class="card-header bg-primary text-white">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Vol #${flight.id}</h5>
@@ -88,9 +88,7 @@
                                             <div class="fs-5 fw-bold">${flight.departureCity.name}</div>
                                             <div class="text-muted">Départ</div>
                                         </div>
-                                        <div class="text-center">
-                                            <i class="bi bi-airplane fs-4"></i>
-                                        </div>
+                                        <i class="bi bi-airplane fs-4"></i>
                                         <div class="text-center">
                                             <div class="fs-5 fw-bold">${flight.arrivalCity.name}</div>
                                             <div class="text-muted">Arrivée</div>
@@ -99,22 +97,22 @@
 
                                     <div class="mb-3">
                                         <div class="fw-bold mb-2">Avion: ${flight.plane.model}</div>
-                                        <div class="fw-bold mb-2">Prix des sièges:</div>
-                                        <div class="row">
+                                        <div class="fw-bold mb-2">Prix des sièges: </div>
+                                        <ul class="list-group">
                                             <c:forEach items="${flight.seatPricingList}" var="pricing">
-                                                <div class="col-md-4 mb-2">
-                                                    <div class="d-flex justify-content-between">
-                                                        <span>${pricing.seat.seatType.designation}</span>
-                                                        <span class="fw-bold"><fmt:formatNumber value="${pricing.unitPrice}" type="currency" currencySymbol="Ar"/></span>
-                                                    </div>
-                                                </div>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>${pricing.seat.seatType.designation}</span>
+                                                    <span class="badge bg-primary rounded-pill">
+                                                        <fmt:formatNumber value="${pricing.unitPrice}" type="currency" currencySymbol="Ar"/>
+                                                    </span>
+                                                </li>
                                             </c:forEach>
-                                        </div>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="card-footer">
                                     <a href="<c:url value="/vols/${flight.id}/reserver"/>" class="btn btn-primary w-100">
-                                        <i class="bi bi-book-fill"></i> Réserver
+                                        <i class="bi bi-bookmark-check"></i> Réserver
                                     </a>
                                 </div>
                             </div>

@@ -45,14 +45,14 @@ public class FlightService {
 
     public List<Flight> search(
         final FlightSearchRequest request,
-        final boolean fetchSeatPricingList,
+        final boolean innerJoinFetchSeatPricingList,
         final EntityManager entityManager
     ) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flight> criteriaQuery = criteriaBuilder.createQuery(Flight.class);
         Root<Flight> root = criteriaQuery.from(Flight.class);
 
-        if (fetchSeatPricingList) root.fetch("seatPricingList");
+        if (innerJoinFetchSeatPricingList) root.fetch("seatPricingList");
 
         List<Predicate> predicates = new ArrayList<>();
 
