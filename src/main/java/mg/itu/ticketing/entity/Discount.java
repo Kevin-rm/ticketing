@@ -21,7 +21,7 @@ public class Discount {
 
     @Setter
     @Column(nullable = false)
-    private Integer seatsCount;
+    private Integer seatCount;
 
     @Setter
     @OneToOne

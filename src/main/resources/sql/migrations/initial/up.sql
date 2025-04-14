@@ -57,7 +57,7 @@ CREATE TABLE user_role
 CREATE TABLE seat
 (
     id           SERIAL PRIMARY KEY,
-    seats_count  INTEGER NOT NULL DEFAULT 0,
+    seat_count   INTEGER NOT NULL DEFAULT 0,
     plane_id     INTEGER NOT NULL,
     seat_type_id INTEGER NOT NULL,
     UNIQUE (plane_id, seat_type_id),
@@ -81,7 +81,7 @@ CREATE TABLE reservation
     id              SERIAL PRIMARY KEY,
     status          VARCHAR(9) NOT NULL,
     timestamp       TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    seats_count     INTEGER    NOT NULL,
+    seat_count      INTEGER    NOT NULL,
     seat_pricing_id INTEGER    NOT NULL,
     user_id         INTEGER    NOT NULL,
     FOREIGN KEY (seat_pricing_id) REFERENCES seat_pricing (id),
@@ -92,7 +92,7 @@ CREATE TABLE discount
 (
     id              SERIAL PRIMARY KEY,
     percentage      NUMERIC(5, 2) NOT NULL,
-    seats_count     INTEGER       NOT NULL,
+    seat_count      INTEGER       NOT NULL,
     seat_pricing_id INTEGER       NOT NULL UNIQUE,
     FOREIGN KEY (seat_pricing_id) REFERENCES seat_pricing (id)
 );
