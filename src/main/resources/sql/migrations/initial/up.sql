@@ -78,22 +78,14 @@ CREATE TABLE seat_pricing
 
 CREATE TABLE reservation
 (
-    id        SERIAL PRIMARY KEY,
-    status    VARCHAR(9) NOT NULL,
-    timestamp TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id   INTEGER    NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES _user (id)
-);
-
-CREATE TABLE seat_reservation
-(
     id              SERIAL PRIMARY KEY,
-    seats_count     INTEGER NOT NULL,
-    seat_pricing_id INTEGER NOT NULL,
-    reservation_id  INTEGER NOT NULL,
-    UNIQUE (seat_pricing_id, reservation_id),
+    status          VARCHAR(9) NOT NULL,
+    timestamp       TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    seats_count     INTEGER    NOT NULL,
+    seat_pricing_id INTEGER    NOT NULL,
+    user_id         INTEGER    NOT NULL,
     FOREIGN KEY (seat_pricing_id) REFERENCES seat_pricing (id),
-    FOREIGN KEY (reservation_id) REFERENCES reservation (id)
+    FOREIGN KEY (user_id) REFERENCES _user (id)
 );
 
 CREATE TABLE discount

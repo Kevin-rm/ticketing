@@ -8,8 +8,6 @@ import mg.itu.ticketing.enums.ReservationStatus;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @ToString
@@ -29,10 +27,16 @@ public class Reservation {
     private LocalDateTime timestamp;
 
     @Setter
+    @Column(nullable = false)
+    private Integer seatsCount;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private SeatPricing seatPricing;
+
+    @Setter
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
-
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SeatReservation> seatReservations = new ArrayList<>();
 }

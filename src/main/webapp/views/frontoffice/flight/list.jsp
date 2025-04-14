@@ -83,15 +83,25 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <div class="text-center">
-                                            <div class="fs-5 fw-bold">${flight.departureCity.name}</div>
-                                            <div class="text-muted">Départ</div>
-                                        </div>
-                                        <i class="bi bi-airplane fs-4"></i>
-                                        <div class="text-center">
-                                            <div class="fs-5 fw-bold">${flight.arrivalCity.name}</div>
-                                            <div class="text-muted">Arrivée</div>
+                                    <div class="mb-4">
+                                        <div class="row text-center position-relative">
+                                            <div class="col-5">
+                                                <div class="fs-5 fw-bold text-truncate">
+                                                    ${flight.departureCity.name}
+                                                </div>
+                                                <div class="text-muted">Départ</div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="position-absolute top-50 start-50 translate-middle px-2">
+                                                    <i class="bi bi-airplane fs-4"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-5">
+                                                <div class="fs-5 fw-bold text-truncate">
+                                                    ${flight.arrivalCity.name}
+                                                </div>
+                                                <div class="text-muted">Arrivée</div>
+                                            </div>
                                         </div>
                                     </div>
 
