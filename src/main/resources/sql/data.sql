@@ -16,7 +16,7 @@ VALUES ('Économique'),
        ('Affaires'),
        ('Première Classe');
 
-INSERT INTO seat (seats_count, plane_id, seat_type_id)
+INSERT INTO seat (seat_count, plane_id, seat_type_id)
 VALUES
     -- Seats for Boeing 737
     (120, 1, 1), -- 120 Economy seats

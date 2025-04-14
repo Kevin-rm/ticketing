@@ -38,7 +38,7 @@
                 togglePasswordButton.addEventListener("click", () => {
                     const showPassword = passwordInput.type === "password";
                     passwordInput.type = showPassword ? "text" : "password";
-                    icon.className = `bi bi-eye\${showPassword ? "" : "-slash"}`;
+                    icon.className = `bi bi-eye\${showPassword ? "-slash" : ""}`;
                 });
             });
         </script>

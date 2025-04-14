@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public record SeatWithPricingDTO(
     Integer    seatId,
-    Integer    seatsCount,
+    Integer    seatCount,
     BigDecimal unitPrice,
     String     seatTypeDesignation,
     Integer    flightId

@@ -62,7 +62,7 @@
                                     <h6 class="mb-0">${seat.seatTypeDesignation()}</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p class="mb-2">Nombre de sièges disponibles: ${seat.seatsCount()}</p>
+                                    <p class="mb-2">Nombre de sièges disponibles: ${seat.seatCount()}</p>
                                     <div class="mb-3">
                                         <label for="${formattedId}.unit-price" class="form-label fw-semibold">Prix unitaire (Ar)</label>
                                         <input type="number"

@@ -17,7 +17,7 @@ import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
 @RequiredArgsConstructor
-@Authorize({"USER", "ADMIN"})
+@Authorize({"CUSTOMER", "ADMIN"})
 @Controller
 public class ReservationController {
     private static final String VIEWS_PATH = ApplicationConstants.Views.FRONTOFFICE_PREFIX + "reservation/";
