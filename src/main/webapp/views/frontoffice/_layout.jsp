@@ -21,12 +21,12 @@
                                 <a class="nav-link" href="<c:url value="/vols"/>">Vols</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<c:url value="/reservations"/>">Mes réservations</a>
+                                <a class="nav-link" href="<c:url value="/mes-reservations"/>">Mes réservations</a>
                             </li>
                         </ul>
                         <ul class="navbar-nav ms-auto">
                             <c:choose>
-                                <c:when test="${auth:isUserAuthenticated()()}">
+                                <c:when test="${auth:isUserAuthenticated()}">
                                     <%@ include file="/views/partials/user-menu.jsp" %>
                                 </c:when>
                                 <c:otherwise>

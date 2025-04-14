@@ -43,10 +43,16 @@ public class FlightService {
         entityManager.remove(flight);
     }
 
-    public List<Flight> search(final FlightSearchRequest request, final EntityManager entityManager) {
+    public List<Flight> search(
+        final FlightSearchRequest request,
+        final boolean fetchSeatPricingList,
+        final EntityManager entityManager
+    ) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flight> criteriaQuery = criteriaBuilder.createQuery(Flight.class);
         Root<Flight> root = criteriaQuery.from(Flight.class);
+
+        if (fetchSeatPricingList) root.fetch("seatPricingList");
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -67,6 +73,10 @@ public class FlightService {
         return entityManager.createQuery(criteriaQuery.where(
             predicates.toArray(new Predicate[0])
         )).getResultList();
+    }
+
+    public List<Flight> search(final FlightSearchRequest request, final EntityManager entityManager) {
+        return search(request, false, entityManager);
     }
 
     private Flight populateFromRequest(

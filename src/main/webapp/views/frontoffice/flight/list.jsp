@@ -4,7 +4,7 @@
 
 <layout:extends file="/views/frontoffice/_layout">
     <layout:put block="content">
-        <h2 class="mb-4 text-primary">Rechercher un vol</h2>
+        <h3 class="fw-bold text-primary mb-4">Rechercher un vol</h3>
 
         <div class="card mb-4">
             <div class="card-body">
@@ -12,82 +12,123 @@
                     <jsp:useBean id="f" scope="request" type="mg.itu.ticketing.request.FlightSearchRequest"/>
                     <jsp:useBean id="cities" scope="request" type="java.util.List<mg.itu.ticketing.entity.City>"/>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-lg-3">
                         <label for="departure-city" class="form-label">Ville de départ</label>
-                        <select class="form-select" id="departure-city" name="f.departureCityId" required>
-                            <option value="">Sélectionnez une ville</option>
+                        <select class="form-select" id="departure-city" name="f.departureCityId">
+                            <option value="">Toutes les villes</option>
                             <c:forEach items="${cities}" var="city">
                                 <option value="${city.id}" ${f.departureCityId == city.id ? "selected" : ""}>
-                                    ${city.name}
+                                        ${city.name}
                                 </option>
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-lg-3">
                         <label for="arrival-city" class="form-label">Ville d'arrivée</label>
-                        <select class="form-select" id="arrival-city" name="f.arrivalCityId" required>
-                            <option value="">Sélectionnez une ville</option>
+                        <select class="form-select" id="arrival-city" name="f.arrivalCityId">
+                            <option value="">Toutes les villes</option>
                             <c:forEach items="${cities}" var="city">
                                 <option value="${city.id}" ${f.arrivalCityId == city.id ? "selected" : ""}>
-                                    ${city.name}
+                                        ${city.name}
                                 </option>
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <label for="min-departure-timestamp" class="form-label">Date de départ (à partir de)</label>
-                        <input type="datetime-local" 
-                               class="form-control" 
+                    <div class="col-md-6 col-lg-3">
+                        <label for="min-departure-timestamp" class="form-label">Date de départ au plus tôt</label>
+                        <input type="datetime-local"
+                               class="form-control"
                                id="min-departure-timestamp"
                                name="f.minDepartureTimestamp"
                                value="${f.minDepartureTimestamp}">
                     </div>
+                    <div class="col-md-6 col-lg-3">
+                        <label for="max-departure-timestamp" class="form-label">Date de départ au plus tard</label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="max-departure-timestamp"
+                               name="f.maxDepartureTimestamp"
+                               value="${f.maxDepartureTimestamp}">
+                    </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-search"></i> Rechercher
-                        </button>
-                        <a href="<c:url value="/vols"/>" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-lg"></i> Réinitialiser
-                        </a>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="<c:url value="/vols"/>" class="btn btn-light">
+                                <i class="bi bi-x-lg"></i> Réinitialiser
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search"></i> Rechercher
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        <jsp:useBean id="flights" scope="request" type="java.util.List<mg.itu.ticketing.entity.Flight>"/>
-        
-        <h3 class="mb-3">Résultats de recherche</h3>
-        
-        <c:choose>
-            <c:when test="${empty flights}">
-                <div class="alert alert-info">
-                    Aucun vol disponible selon vos critères de recherche.
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="row row-cols-1 row-cols-md-2 g-4">
+        <h3 class="fw-bold text-primary mb-4">Vols disponibles</h3>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <jsp:useBean id="flights" scope="request" type="java.util.List<mg.itu.ticketing.entity.Flight>"/>
+            <c:choose>
+                <c:when test="${not empty flights}">
                     <c:forEach items="${flights}" var="flight">
                         <div class="col">
                             <div class="card h-100">
                                 <div class="card-header bg-primary text-white">
-                                    Vol #${flight.id} - ${flight.departureCity.name} → ${flight.arrivalCity.name}
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Vol #${flight.id}</h5>
+                                        <span class="fw-bold">
+                                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                            <fmt:formatDate value="${departureDate}" pattern="dd/MM/yyyy HH:mm"/>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">${flight.plane.model}</h5>
-                                    <p class="card-text">
-                                        <strong>Date et heure de départ :</strong><br>
-                                        <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" />
-                                        <fmt:formatDate value="${parsedDate}" pattern="dd MMMM yyyy 'à' HH:mm" />
-                                    </p>
-                                    <a href="<c:url value="/vols/${flight.id}/reserver"/>" class="btn btn-primary">
-                                        <i class="bi bi-ticket-perforated"></i> Réserver
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="text-center">
+                                            <div class="fs-5 fw-bold">${flight.departureCity.name}</div>
+                                            <div class="text-muted">Départ</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <i class="bi bi-airplane fs-4"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="fs-5 fw-bold">${flight.arrivalCity.name}</div>
+                                            <div class="text-muted">Arrivée</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="fw-bold mb-2">Avion: ${flight.plane.model}</div>
+                                        <div class="fw-bold mb-2">Prix des sièges:</div>
+                                        <div class="row">
+                                            <c:forEach items="${flight.seatPricingList}" var="pricing">
+                                                <div class="col-md-4 mb-2">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>${pricing.seat.seatType.designation}</span>
+                                                        <span class="fw-bold"><fmt:formatNumber value="${pricing.unitPrice}" type="currency" currencySymbol="Ar"/></span>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="<c:url value="/vols/${flight.id}/reserver"/>" class="btn btn-primary w-100">
+                                        <i class="bi bi-book-fill"></i> Réserver
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
-                </div>
-            </c:otherwise>
-        </c:choose>
+                </c:when>
+                <c:otherwise>
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i> Aucun vol ne correspond à vos critères de recherche.
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </layout:put>
 </layout:extends>

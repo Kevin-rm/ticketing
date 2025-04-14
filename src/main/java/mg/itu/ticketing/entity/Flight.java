@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @ToString
@@ -33,4 +34,7 @@ public class Flight {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Plane plane;
+
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatPricing> seatPricingList;
 }
