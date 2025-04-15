@@ -16,45 +16,52 @@
         <jsp:useBean id="r" scope="request" type="mg.itu.ticketing.request.ReservationRequest"/>
         
         <div class="card shadow-sm mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Détails du vol</h5>
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Détails du vol #${flight.id}</h5>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <h6 class="fw-bold">ID du vol</h6>
-                        <p>${flight.id}</p>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Trajet</h6>
+                            <p class="fs-5">${flight.departureCity.name} → ${flight.arrivalCity.name}</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Date et heure de départ</h6>
+                            <p>
+                                <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                <fmt:formatDate value="${departureDate}" pattern="dd/MM/yyyy HH:mm"/>
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Avion</h6>
+                            <p>${flight.plane.model}</p>
+                        </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <h6 class="fw-bold">Départ</h6>
-                        <p>${flight.departureCity.name}</p>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h6 class="fw-bold">Destination</h6>
-                        <p>${flight.arrivalCity.name}</p>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h6 class="fw-bold">Date et heure de départ</h6>
-                        <p>
-                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
-                            <fmt:formatDate value="${departureDate}" pattern="dd/MM/yyyy HH:mm"/>
-                        </p>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h6 class="fw-bold">Avion</h6>
-                        <p>${flight.plane.model}</p>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-2">Prix des sièges</h6>
+                        <ul class="list-group">
+                            <c:forEach items="${flight.seatPricingList}" var="pricing">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>${pricing.seat.seatType.designation}</span>
+                                    <span class="badge bg-primary rounded-pill">
+                                        <fmt:formatNumber value="${pricing.unitPrice}" type="currency" currencySymbol="Ar"/>
+                                    </span>
+                                </li>
+                            </c:forEach>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="card shadow-sm">
-            <div class="card-header">
+            <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Informations de réservation</h5>
             </div>
             <div class="card-body p-4">
                 <form method="post" class="row g-4">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="seat-pricing" class="form-label fw-semibold">
                             Type de siège
                         </label>
@@ -77,8 +84,6 @@
                             </div>
                         </c:if>
                     </div>
-
-                    <div class="col-md-6"></div>
 
                     <div class="col-md-6">
                         <label for="adult-count" class="form-label fw-semibold">
