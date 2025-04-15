@@ -40,7 +40,8 @@ public class ReservationController {
             model.addData("r", new ReservationRequest());
 
         DatabaseUtils.execute(entityManager ->
-            model.addData("flight", flightService.getById(flightId, entityManager)));
+            model.addData("flight", flightService.getById(flightId, true, entityManager)
+        ));
 
         return VIEWS_PATH + "create";
     }
@@ -55,6 +56,8 @@ public class ReservationController {
         if (modelBindingResult.hasErrors()) {
             redirectData.addAll(modelBindingResult.getFieldErrorsMap());
             redirectData.add("r", reservationRequest);
+
+            return String.format("redirect:/reservations/vol-%d/creer", flightId);
         }
 
         try {

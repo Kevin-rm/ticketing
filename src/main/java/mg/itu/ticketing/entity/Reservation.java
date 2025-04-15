@@ -23,7 +23,6 @@ public class Reservation {
     @Column(nullable = false)
     private ReservationStatus status = ReservationStatus.getDefault();
 
-    @Column(nullable = false)
     private LocalDateTime timestamp;
 
     @Setter
