@@ -48,8 +48,8 @@
                                         </td>
                                         <td>${reservation.seatPricing.seat.seatType.designation}</td>
                                         <td>
-                                            <span>${reservation.adultCount} adulte(s)</span>
-                                            <span>${reservation.childCount} enfant(s)</span>
+                                            <div>${reservation.adultCount} adulte(s)</div>
+                                            <div>${reservation.childCount} enfant(s)</div>
                                         </td>
                                         <td>
                                             <fmt:formatNumber value="${reservation.seatPricing.unitPrice * (reservation.adultCount + reservation.childCount)}"
@@ -84,18 +84,11 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Confirmation d'annulation</h5>
+                                                        <h5 class="modal-title">Confirmation</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Voulez-vous vraiment annuler cette réservation ?</p>
-                                                        <p class="text-danger"><strong>Attention:</strong> Cette action est irréversible.</p>
-                                                        <div class="alert alert-info">
-                                                            <strong>Détails de la réservation:</strong><br>
-                                                            Vol: #${reservation.seatPricing.flight.id}<br>
-                                                            Trajet: ${reservation.seatPricing.flight.departureCity.name} → ${reservation.seatPricing.flight.arrivalCity.name}<br>
-                                                            Date de départ: <fmt:formatDate value="${departureDate}" pattern="dd/MM/yyyy HH:mm"/>
-                                                        </div>
+                                                        Voulez-vous vraiment annuler cette réservation ?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
