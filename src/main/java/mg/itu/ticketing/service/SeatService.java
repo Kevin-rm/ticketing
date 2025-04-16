@@ -32,7 +32,7 @@ public class SeatService {
         return entityManager.createQuery("""
            SELECT NEW mg.itu.ticketing.dto.SeatWithPricingDTO(
                 s.id,
-                s.seatsCount, 
+                s.seatCount, 
                 CAST(COALESCE(sp.unitPrice, 0.00) AS BIGDECIMAL),
                 s.seatType.designation, 
                 :flightId)

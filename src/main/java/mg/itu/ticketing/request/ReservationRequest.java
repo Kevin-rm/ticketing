@@ -2,20 +2,18 @@ package mg.itu.ticketing.request;
 
 import lombok.Data;
 import mg.matsd.javaframework.validation.constraints.basic.Required;
-
-import java.util.ArrayList;
-import java.util.List;
+import mg.matsd.javaframework.validation.constraints.number.PositiveOrZero;
 
 @Data
 public class ReservationRequest {
-    private List<SeatReservationRequest> seatReservations = new ArrayList<>();
+    @Required
+    private Integer seatPricingId;
 
-    @Data
-    public static class SeatReservationRequest {
-        @Required
-        private Integer seatsCount;
+    @Required
+    @PositiveOrZero
+    private Integer adultCount = 0;
 
-        @Required
-        private Integer seatPricingId;
-    }
+    @Required
+    @PositiveOrZero
+    private Integer childCount = 0;
 }

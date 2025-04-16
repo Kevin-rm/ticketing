@@ -22,11 +22,26 @@ public class FlightService {
     private final PlaneService planeService;
 
     public Flight getById(final Integer id, final EntityManager entityManager) {
-        Flight flight = entityManager.find(Flight.class, id);
-        if (flight == null)
-            throw new RuntimeException("Aucun vol trouvé avec l'identifiant: " + id);
+        return getById(id, false, entityManager);
+    }
 
-        return flight;
+    public Flight getById(
+        final Integer id,
+        final boolean innerJoinFetchSeatPricingList,
+        final EntityManager entityManager
+    ) {
+        if (innerJoinFetchSeatPricingList) {
+            List<Flight> results = entityManager.createQuery(
+                "SELECT f FROM Flight f JOIN FETCH f.seatPricingList WHERE f.id = :id", Flight.class
+            ).setParameter("id", id).getResultList();
+
+            if (!results.isEmpty()) return results.getFirst();
+        } else {
+            Flight flight = entityManager.find(Flight.class, id);
+            if (flight != null) return flight;
+        }
+
+        throw new RuntimeException("Aucun vol trouvé avec l'identifiant: " + id);
     }
 
     public void insert(final FlightRequest request, final EntityManager entityManager) {
@@ -43,10 +58,16 @@ public class FlightService {
         entityManager.remove(flight);
     }
 
-    public List<Flight> search(final FlightSearchRequest request, final EntityManager entityManager) {
+    public List<Flight> search(
+        final FlightSearchRequest request,
+        final boolean innerJoinFetchSeatPricingList,
+        final EntityManager entityManager
+    ) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flight> criteriaQuery = criteriaBuilder.createQuery(Flight.class);
         Root<Flight> root = criteriaQuery.from(Flight.class);
+
+        if (innerJoinFetchSeatPricingList) root.fetch("seatPricingList");
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -67,6 +88,10 @@ public class FlightService {
         return entityManager.createQuery(criteriaQuery.where(
             predicates.toArray(new Predicate[0])
         )).getResultList();
+    }
+
+    public List<Flight> search(final FlightSearchRequest request, final EntityManager entityManager) {
+        return search(request, false, entityManager);
     }
 
     private Flight populateFromRequest(

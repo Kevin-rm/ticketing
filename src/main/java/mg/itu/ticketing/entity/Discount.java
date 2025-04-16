@@ -3,10 +3,12 @@ package mg.itu.ticketing.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @Getter
+@ToString
 @Entity
 public class Discount {
     @Id
@@ -19,7 +21,7 @@ public class Discount {
 
     @Setter
     @Column(nullable = false)
-    private Integer seatsCount;
+    private Integer seatCount;
 
     @Setter
     @OneToOne

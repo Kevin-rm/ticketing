@@ -14,7 +14,7 @@ public class DiscountService {
     public void insert(final DiscountRequest discountRequest, final EntityManager entityManager) {
         Discount discount = new Discount();
         discount.setPercentage(discountRequest.getPercentage());
-        discount.setSeatsCount(discountRequest.getSeatsCount());
+        discount.setSeatCount(discountRequest.getSeatsCount());
         discount.setSeatPricing(seatPricingService.getById(discountRequest.getSeatPricingId(), entityManager));
 
         entityManager.persist(discount);

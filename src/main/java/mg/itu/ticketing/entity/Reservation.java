@@ -3,14 +3,14 @@ package mg.itu.ticketing.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import mg.itu.ticketing.enums.ReservationStatus;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
+@ToString
 @Entity
 @DynamicInsert
 public class Reservation {
@@ -23,14 +23,23 @@ public class Reservation {
     @Column(nullable = false)
     private ReservationStatus status = ReservationStatus.getDefault();
 
-    @Column(nullable = false)
     private LocalDateTime timestamp;
+
+    @Setter
+    @Column(nullable = false)
+    private Integer adultCount;
+
+    @Setter
+    @Column(nullable = false)
+    private Integer childCount;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private SeatPricing seatPricing;
 
     @Setter
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
-
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SeatReservation> seatReservations = new ArrayList<>();
 }
