@@ -32,27 +32,26 @@
                         <c:choose>
                             <c:when test="${not empty reservations}">
                                 <c:forEach items="${reservations}" var="reservation">
+                                    <c:set var="seatPricing" value="${reservation.seatPricing}"/>
+                                    <c:set var="flight" value="${seatPricing.flight}"/>
                                     <tr>
                                         <td><strong>#${reservation.id}</strong></td>
+                                        <td>${flight.departureCity.name} → ${flight.arrivalCity.name}</td>
                                         <td>
-                                            ${reservation.seatPricing.flight.departureCity.name} →
-                                            ${reservation.seatPricing.flight.arrivalCity.name}
-                                        </td>
-                                        <td>
-                                            <fmt:parseDate value="${reservation.seatPricing.flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
                                             <fmt:formatDate value="${departureDate}" pattern="dd/MM/yyyy HH:mm"/>
                                         </td>
                                         <td>
                                             <fmt:parseDate value="${reservation.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="reservationDate"/>
                                             <fmt:formatDate value="${reservationDate}" pattern="dd/MM/yyyy HH:mm"/>
                                         </td>
-                                        <td>${reservation.seatPricing.seat.seatType.designation}</td>
+                                        <td>${seatPricing.seat.seatType.designation}</td>
                                         <td>
                                             <div>${reservation.adultCount} adulte(s)</div>
                                             <div>${reservation.childCount} enfant(s)</div>
                                         </td>
                                         <td>
-                                            <fmt:formatNumber value="${reservation.seatPricing.unitPrice * (reservation.adultCount + reservation.childCount)}"
+                                            <fmt:formatNumber value="${seatPricing.unitPrice * (reservation.adultCount + reservation.childCount)}"
                                                               type="currency"
                                                               currencySymbol="Ar"/>
                                         </td>
