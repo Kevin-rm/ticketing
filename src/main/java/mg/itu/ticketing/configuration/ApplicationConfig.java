@@ -5,6 +5,7 @@ import mg.matsd.javaframework.core.annotations.ManagedInstance;
 import mg.matsd.javaframework.core.annotations.Nullable;
 import mg.matsd.javaframework.core.io.ClassPathResource;
 import mg.matsd.javaframework.core.io.Resource;
+import mg.matsd.javaframework.core.utils.Assert;
 import mg.matsd.javaframework.security.base.AuthenticationManager;
 import mg.matsd.javaframework.security.base.PasswordHasher;
 import mg.matsd.javaframework.security.base.Security;
@@ -40,7 +41,10 @@ public class ApplicationConfig {
     }
 
     public static String apiBaseurl() {
-        return (String) getProperty("api.baseurl");
+        final String result = (String) getProperty("api.baseurl");
+        Assert.state(result != null, "La propriété \"api.baseurl\" ne peut pas être \"null\"");
+
+        return result;
     }
 
     @ManagedInstance
