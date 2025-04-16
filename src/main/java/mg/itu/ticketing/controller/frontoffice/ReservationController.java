@@ -92,4 +92,11 @@ public class ReservationController {
 
         return "redirect:/mes-reservations";
     }
+
+    @Get("/reservations/{id}/pdf")
+    public String generatePdf(@PathVariable Integer id, RedirectData redirectData) {
+        // TODO: Call the Spring Boot api to generate the PDF 
+
+        return null;
+    }
 }
