@@ -63,8 +63,7 @@
                                         <td class="text-center">
                                             <div class="btn-group btn-group-sm">
                                                 <a href="<c:url value="/reservations/${reservation.id}/pdf"/>" 
-                                                   class="btn btn-outline-primary"
-                                                   target="_blank">
+                                                   class="btn btn-outline-primary">
                                                     <i class="bi bi-file-pdf"></i> PDF
                                                 </a>
                                                 <c:if test="${reservation.status != 'CANCELLED'}">

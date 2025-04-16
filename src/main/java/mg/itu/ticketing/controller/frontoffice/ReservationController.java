@@ -7,6 +7,7 @@ import mg.itu.prom16.annotations.*;
 import mg.itu.prom16.base.Model;
 import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
+import mg.itu.ticketing.configuration.ApplicationConfig;
 import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
 import mg.itu.ticketing.request.ReservationRequest;
 import mg.itu.ticketing.service.FlightService;
@@ -103,15 +104,15 @@ public class ReservationController {
     }
 
     @Get("/reservations/{id}/pdf")
-    public String generatePdf(
+    public String downloadPdf(
         @PathVariable Integer id, RedirectData redirectData, HttpServletResponse httpServletResponse
     ) {
         try (HttpClient httpClient = HttpClient.newHttpClient()) {
-            String apiUrl = "http://localhost:8080/api/reservations/" + id + "/pdf";
-
             try {
                 HttpResponse<InputStream> httpResponse = httpClient.send(HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl))
+                    .uri(URI.create(
+                        String.format("%s/reservations/%d/pdf", ApplicationConfig.apiBaseurl(), id)
+                    ))
                     .GET()
                     .build(), HttpResponse.BodyHandlers.ofInputStream());
 
