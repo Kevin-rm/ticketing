@@ -1,5 +1,6 @@
 package mg.itu.ticketing.controller.frontoffice;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import mg.itu.prom16.annotations.*;
@@ -15,6 +16,14 @@ import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.itu.ticketing.utils.Facade;
 import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -94,9 +103,39 @@ public class ReservationController {
     }
 
     @Get("/reservations/{id}/pdf")
-    public String generatePdf(@PathVariable Integer id, RedirectData redirectData) {
-        // TODO: Call the Spring Boot api to generate the PDF 
+    public String generatePdf(
+        @PathVariable Integer id, RedirectData redirectData, HttpServletResponse httpServletResponse
+    ) {
+        try (HttpClient httpClient = HttpClient.newHttpClient()) {
+            String apiUrl = "http://localhost:8080/api/reservations/" + id + "/pdf";
 
-        return null;
+            try {
+                HttpResponse<InputStream> httpResponse = httpClient.send(HttpRequest.newBuilder()
+                    .uri(URI.create(apiUrl))
+                    .GET()
+                    .build(), HttpResponse.BodyHandlers.ofInputStream());
+
+                if (httpResponse.statusCode() == 200) {
+                    HttpHeaders httpHeaders = httpResponse.headers();
+                    httpHeaders.firstValue("Content-Type")
+                        .ifPresent(httpServletResponse::setContentType);
+                    httpHeaders.firstValue("Content-Disposition")
+                        .ifPresent(cd -> httpServletResponse.setHeader("Content-Disposition", cd));
+
+                    try (final InputStream inputStream = httpResponse.body();
+                         final OutputStream outputStream = httpServletResponse.getOutputStream()
+                    ) { inputStream.transferTo(outputStream); }
+
+                    return null;
+                }
+
+                redirectData.add("error", "Erreur lors de la génération du PDF");
+            } catch (Exception e) {
+                log.error("Erreur lors de la communication avec le service PDF", e);
+                redirectData.add("error", "Une erreur inattendue est survenue");
+            }
+
+            return "redirect:/mes-reservations";
+        }
     }
 }
