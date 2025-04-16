@@ -39,11 +39,11 @@
                                         <td>${flight.departureCity.name} → ${flight.arrivalCity.name}</td>
                                         <td>
                                             <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
-                                            <fmt:formatDate value="${departureDate}" pattern="dd/MM/yyyy HH:mm"/>
+                                            <fmt:formatDate value="${departureTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                                         </td>
                                         <td>
                                             <fmt:parseDate value="${reservation.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="reservationDate"/>
-                                            <fmt:formatDate value="${reservationDate}" pattern="dd/MM/yyyy HH:mm"/>
+                                            <fmt:formatDate value="${reservationTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                                         </td>
                                         <td>${seatPricing.seat.seatType.designation}</td>
                                         <td>
