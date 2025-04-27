@@ -125,9 +125,6 @@
 
                     <div class="col-12">
                         <hr class="mb-4">
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i> Assurez-vous que le nombre total de passagers (adultes + enfants) ne dépasse pas la capacité disponible.
-                        </div>
                         <button type="submit" class="btn btn-primary px-4">
                             <i class="bi bi-check-lg"></i>
                             Confirmer la réservation

@@ -9,6 +9,7 @@ import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
 import mg.itu.ticketing.configuration.ApplicationConfig;
 import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
+import mg.itu.ticketing.exception.TooLateReservationException;
 import mg.itu.ticketing.request.ReservationRequest;
 import mg.itu.ticketing.service.FlightService;
 import mg.itu.ticketing.service.ReservationService;
@@ -78,13 +79,16 @@ public class ReservationController {
             redirectData.add("success", "Réservation créée avec succès");
 
             return "redirect:/mes-reservations";
+        } catch (TooLateReservationException e) {
+            redirectData.add("error", e.getMessage());
         } catch (Exception e) {
             log.error("Erreur lors de la création d'une réservation", e);
+
             redirectData.add("error", "Erreur lors de la création de réservation");
             redirectData.add("r", reservationRequest);
-
-            return String.format("redirect:/reservations/vol-%d/creer", flightId);
         }
+
+        return String.format("redirect:/reservations/vol-%d/creer", flightId);
     }
 
     @Post("/reservations/{id}/annuler")

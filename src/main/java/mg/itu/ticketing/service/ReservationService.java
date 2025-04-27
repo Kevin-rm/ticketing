@@ -2,20 +2,20 @@ package mg.itu.ticketing.service;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import mg.itu.ticketing.entity.Discount;
-import mg.itu.ticketing.entity.Reservation;
-import mg.itu.ticketing.entity.SeatPricing;
-import mg.itu.ticketing.entity.User;
+import mg.itu.ticketing.entity.*;
 import mg.itu.ticketing.enums.ReservationStatus;
 import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
+import mg.itu.ticketing.exception.TooLateReservationException;
 import mg.itu.ticketing.request.ReservationRequest;
 import mg.matsd.javaframework.core.annotations.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static mg.itu.ticketing.utils.ApplicationConstants.BigDecimals.*;
+import static mg.itu.ticketing.utils.ApplicationConstants.BigDecimals.ONE_HUNDRED;
 
 @RequiredArgsConstructor
 @Component
@@ -43,17 +43,21 @@ public class ReservationService {
         final EntityManager entityManager,
         final User user
     ) {
+        final SeatPricing seatPricing = seatPricingService.getById(request.getSeatPricingId(), entityManager);
+        final Settings settings = settingsService.getFirstOrNew(entityManager);
+
+        final Integer minReservationHours = settings.getMinReservationHours();
+        if (Duration.between(LocalDateTime.now(), seatPricing.getFlight().getDepartureTimestamp()).toHours() < minReservationHours)
+            throw new TooLateReservationException(minReservationHours);
+
         Reservation reservation = new Reservation();
         reservation.setAdultCount(request.getAdultCount());
         reservation.setChildCount(request.getChildCount());
-
-        SeatPricing seatPricing = seatPricingService.getById(request.getSeatPricingId(), entityManager);
         reservation.setSeatPricing(seatPricing);
 
         final BigDecimal unitPrice = seatPricing.getUnitPrice();
         final Discount discount    = seatPricing.getDiscount();
-        final BigDecimal childDiscountFactor = settingsService.getFirstOrNew(entityManager)
-            .getChildDiscountPercentage()
+        final BigDecimal childDiscountFactor = settings.getChildDiscountPercentage()
             .divide(ONE_HUNDRED, RoundingMode.HALF_UP);
 
         final int adultCount = reservation.getAdultCount();
