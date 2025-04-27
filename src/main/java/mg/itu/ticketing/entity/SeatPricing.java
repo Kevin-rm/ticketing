@@ -20,6 +20,9 @@ public class SeatPricing {
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
+    @OneToOne(mappedBy = "seatPricing")
+    private Discount discount;
+
     @Setter
     @ManyToOne
     @JoinColumn(nullable = false)

@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,11 +23,14 @@ public class Settings {
 
     @Setter
     @Column(nullable = false)
-    private Integer minReservationHours;
+    private Integer minReservationHours = 1;
 
     @Setter
     @Column(nullable = false)
-    private Integer minCancellationHours;
+    private Integer minCancellationHours = 1;
+
+    @Column(precision = 5, scale = 2)
+    private BigDecimal childDiscountPercentage = new BigDecimal("50.00");
 
     private LocalDateTime modifiedAt;
 

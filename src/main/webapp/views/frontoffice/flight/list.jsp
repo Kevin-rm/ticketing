@@ -106,7 +106,9 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <div class="fw-bold mb-2">Avion: ${flight.plane.model}</div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Avion: </span>${flight.plane.model}
+                                        </div>
                                         <div class="fw-bold mb-2">Prix des sièges: </div>
                                         <ul class="list-group">
                                             <c:forEach items="${flight.seatPricingList}" var="pricing">

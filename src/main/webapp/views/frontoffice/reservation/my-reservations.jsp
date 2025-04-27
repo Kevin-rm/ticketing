@@ -51,9 +51,7 @@
                                             <div>${reservation.childCount} enfant(s)</div>
                                         </td>
                                         <td>
-                                            <fmt:formatNumber value="${seatPricing.unitPrice * (reservation.adultCount + reservation.childCount)}"
-                                                              type="currency"
-                                                              currencySymbol="Ar"/>
+                                            <fmt:formatNumber value="${reservation.totalPrice}" type="currency" currencySymbol="Ar"/>
                                         </td>
                                         <td>
                                             <span class="badge bg-${reservation.status == 'CANCELLED' ? "danger" : "success"}">
