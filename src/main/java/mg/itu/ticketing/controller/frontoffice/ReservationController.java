@@ -9,6 +9,7 @@ import mg.itu.prom16.base.RedirectData;
 import mg.itu.prom16.validation.ModelBindingResult;
 import mg.itu.ticketing.configuration.ApplicationConfig;
 import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
+import mg.itu.ticketing.exception.TooLateReservationCancellationException;
 import mg.itu.ticketing.exception.TooLateReservationException;
 import mg.itu.ticketing.request.ReservationRequest;
 import mg.itu.ticketing.service.FlightService;
@@ -98,10 +99,11 @@ public class ReservationController {
                 reservationService.cancel(reservationService.getById(id, entityManager), entityManager));
 
             redirectData.add("success", "Réservation annulée avec succès");
+        } catch (TooLateReservationCancellationException | AlreadyCancelledReservationException e) {
+            redirectData.add("error", e.getMessage());
         } catch (Exception e) {
             log.error("Erreur lors d'une annulation de réservation", e);
-            redirectData.add("error", e instanceof AlreadyCancelledReservationException ? e.getMessage() :
-                "Erreur lors de l'annulation de réservation");
+            redirectData.add("error", "Erreur lors de l'annulation de réservation");
         }
 
         return "redirect:/mes-reservations";

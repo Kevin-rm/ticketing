@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.*;
 import mg.itu.ticketing.enums.ReservationStatus;
 import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
+import mg.itu.ticketing.exception.TooLateReservationCancellationException;
 import mg.itu.ticketing.exception.TooLateReservationException;
 import mg.itu.ticketing.request.ReservationRequest;
 import mg.matsd.javaframework.core.annotations.Component;
@@ -33,7 +34,11 @@ public class ReservationService {
     }
 
     public List<Reservation> getAllByUser(final User user, final EntityManager entityManager) {
-        return entityManager.createQuery("SELECT r FROM Reservation r WHERE r.user = :user", Reservation.class)
+        return entityManager.createQuery("""
+            SELECT r 
+            FROM Reservation r 
+            WHERE r.user = :user AND r.status = mg.itu.ticketing.enums.ReservationStatus.PLANNED
+        """, Reservation.class)
             .setParameter("user", user)
             .getResultList();
     }
@@ -90,6 +95,10 @@ public class ReservationService {
     public void cancel(final Reservation reservation, final EntityManager entityManager) {
         if (reservation.getStatus() == ReservationStatus.CANCELLED)
             throw new AlreadyCancelledReservationException(reservation);
+
+        final Integer minCancellationHours = settingsService.getFirstOrNew(entityManager).getMinCancellationHours();
+        if (Duration.between(reservation.getTimestamp(), LocalDateTime.now()).toHours() > minCancellationHours)
+            throw new TooLateReservationCancellationException(minCancellationHours);
 
         reservation.setStatus(ReservationStatus.CANCELLED);
         entityManager.merge(reservation);
