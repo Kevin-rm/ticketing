@@ -14,6 +14,9 @@ ALTER TABLE reservation
 ALTER TABLE reservation
     DROP COLUMN IF EXISTS child_count;
 
+ALTER TABLE reservation
+    DROP COLUMN IF EXISTS total_price;
+
 ALTER TABLE _settings DROP COLUMN child_max_age;
 
 ALTER TABLE _settings DROP COLUMN child_discount_percentage;
