@@ -7,6 +7,7 @@ import lombok.ToString;
 import mg.itu.ticketing.enums.ReservationStatus;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -32,6 +33,10 @@ public class Reservation {
     @Setter
     @Column(nullable = false)
     private Integer childCount;
+
+    @Setter
+    @Column(precision = 15, scale = 2)
+    private BigDecimal totalPrice;
 
     @Setter
     @ManyToOne
