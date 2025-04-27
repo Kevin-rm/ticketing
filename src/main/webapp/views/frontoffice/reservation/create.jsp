@@ -29,7 +29,7 @@
                         <div class="mb-3">
                             <h6 class="fw-bold">Date et heure de départ</h6>
                             <p>
-                                <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureTimestamp"/>
                                 <fmt:formatDate value="${departureTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                             </p>
                         </div>

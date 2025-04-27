@@ -3,6 +3,7 @@ package mg.itu.ticketing.service;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.Reservation;
+import mg.itu.ticketing.entity.SeatPricing;
 import mg.itu.ticketing.entity.User;
 import mg.itu.ticketing.enums.ReservationStatus;
 import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
@@ -38,7 +39,12 @@ public class ReservationService {
         Reservation reservation = new Reservation();
         reservation.setAdultCount(request.getAdultCount());
         reservation.setChildCount(request.getChildCount());
-        reservation.setSeatPricing(seatPricingService.getById(request.getSeatPricingId(), entityManager));
+
+        SeatPricing seatPricing = seatPricingService.getById(request.getSeatPricingId(), entityManager);
+        reservation.setSeatPricing(seatPricing);
+
+        
+
         reservation.setUser(user);
 
         entityManager.persist(reservation);
