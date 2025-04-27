@@ -69,7 +69,7 @@ public class ReservationService {
             final int availableSeatCount = discountService.countAvailableSeats(discount, entityManager);
 
             final int adultsWithDiscount   = Math.min(adultCount, availableSeatCount);
-            final int childrenWithDiscount = Math.min(childCount, availableSeatCount - adultsWithDiscount );
+            final int childrenWithDiscount = Math.min(childCount, availableSeatCount - adultsWithDiscount);
 
             totalPrice = unitPrice.multiply(BigDecimal.valueOf(adultsWithDiscount)).multiply(discountFactor)
                 .add(BigDecimal.valueOf(adultCount - adultsWithDiscount))
