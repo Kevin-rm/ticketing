@@ -11,11 +11,12 @@ import mg.itu.ticketing.entity.User;
 import mg.itu.ticketing.request.SettingsRequest;
 import mg.itu.ticketing.service.SettingsService;
 import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
 @RequiredArgsConstructor
-// @Authorize("ADMIN")
+@Authorize("ADMIN")
 @Controller
 @RequestMapping("/backoffice/parametres")
 public class SettingsController {

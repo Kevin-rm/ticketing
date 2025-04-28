@@ -77,7 +77,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Vol #${flight.id}</h5>
                                         <span class="fw-bold">
-                                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureTimestamp"/>
                                             <fmt:formatDate value="${departureTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                                         </span>
                                     </div>
@@ -106,7 +106,9 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <div class="fw-bold mb-2">Avion: ${flight.plane.model}</div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Avion: </span>${flight.plane.model}
+                                        </div>
                                         <div class="fw-bold mb-2">Prix des sièges: </div>
                                         <ul class="list-group">
                                             <c:forEach items="${flight.seatPricingList}" var="pricing">

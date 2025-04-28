@@ -29,6 +29,21 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Promotions
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="<c:url value="/backoffice/promotions"/>">Liste</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value="/backoffice/promotions/creer"/>">Création</a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="<c:url value="/backoffice/parametres"/>">Paramètres</a>
                             </li>

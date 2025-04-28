@@ -34,15 +34,15 @@
                                 <c:forEach items="${reservations}" var="reservation">
                                     <c:set var="seatPricing" value="${reservation.seatPricing}"/>
                                     <c:set var="flight" value="${seatPricing.flight}"/>
-                                    <tr>
+                                    <tr style="vertical-align: middle">
                                         <td><strong>#${reservation.id}</strong></td>
                                         <td>${flight.departureCity.name} → ${flight.arrivalCity.name}</td>
                                         <td>
-                                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                            <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureTimestamp"/>
                                             <fmt:formatDate value="${departureTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                                         </td>
                                         <td>
-                                            <fmt:parseDate value="${reservation.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="reservationDate"/>
+                                            <fmt:parseDate value="${reservation.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="reservationTimestamp"/>
                                             <fmt:formatDate value="${reservationTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                                         </td>
                                         <td>${seatPricing.seat.seatType.designation}</td>
@@ -51,9 +51,7 @@
                                             <div>${reservation.childCount} enfant(s)</div>
                                         </td>
                                         <td>
-                                            <fmt:formatNumber value="${seatPricing.unitPrice * (reservation.adultCount + reservation.childCount)}"
-                                                              type="currency"
-                                                              currencySymbol="Ar"/>
+                                            <fmt:formatNumber value="${reservation.totalPrice}" type="currency" currencySymbol="Ar"/>
                                         </td>
                                         <td>
                                             <span class="badge bg-${reservation.status == 'CANCELLED' ? "danger" : "success"}">

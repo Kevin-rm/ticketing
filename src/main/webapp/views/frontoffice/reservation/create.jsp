@@ -29,7 +29,7 @@
                         <div class="mb-3">
                             <h6 class="fw-bold">Date et heure de départ</h6>
                             <p>
-                                <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureDate"/>
+                                <fmt:parseDate value="${flight.departureTimestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="departureTimestamp"/>
                                 <fmt:formatDate value="${departureTimestamp}" pattern="dd/MM/yyyy HH:mm"/>
                             </p>
                         </div>
@@ -125,9 +125,6 @@
 
                     <div class="col-12">
                         <hr class="mb-4">
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i> Assurez-vous que le nombre total de passagers (adultes + enfants) ne dépasse pas la capacité disponible.
-                        </div>
                         <button type="submit" class="btn btn-primary px-4">
                             <i class="bi bi-check-lg"></i>
                             Confirmer la réservation

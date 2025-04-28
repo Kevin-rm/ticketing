@@ -15,9 +15,7 @@ public class SettingsService {
             return entityManager.createQuery("SELECT s FROM Settings s ORDER BY s.id", Settings.class)
                 .setMaxResults(1)
                 .getSingleResult();
-        } catch (NoResultException e) {
-            return new Settings();
-        }
+        } catch (NoResultException e) { return new Settings(); }
     }
 
     public void save(
