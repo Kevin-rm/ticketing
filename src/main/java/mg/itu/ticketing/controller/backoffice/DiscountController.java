@@ -52,7 +52,6 @@ public class DiscountController {
         ModelBindingResult modelBindingResult,
         RedirectData redirectData
     ) {
-        System.out.println(modelBindingResult.getFieldErrorsMap());
         if (modelBindingResult.hasErrors()) {
             redirectData.addAll(modelBindingResult.getFieldErrorsMap());
             redirectData.add("d", discountRequest);
