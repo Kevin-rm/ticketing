@@ -15,6 +15,17 @@ import java.util.List;
 @Component
 public class SeatPricingService {
 
+    public List<SeatPricing> getAll(final EntityManager entityManager) {
+        return entityManager.createQuery("""
+            SELECT sp FROM SeatPricing sp
+            JOIN FETCH sp.flight f
+            JOIN FETCH sp.seat s
+            JOIN FETCH s.seatType
+            JOIN FETCH f.departureCity
+            JOIN FETCH f.arrivalCity
+        """, SeatPricing.class).getResultList();
+    }
+
     public SeatPricing getById(final Integer id, final EntityManager entityManager) {
         SeatPricing seatPricing = entityManager.find(SeatPricing.class, id);
         if (seatPricing == null)
