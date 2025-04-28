@@ -61,27 +61,26 @@
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
-
-                                    <div class="modal fade" id="delete-discount-modal_${discount.id}" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Confirmation</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Voulez-vous vraiment supprimer cette promotion ?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                    <form action="<c:url value="/backoffice/promotions/${discount.id}/supprimer"/>" method="post" class="d-inline">
-                                                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                                                    </form>
-                                                </div>
+                                </td>
+                                <div class="modal fade" id="delete-discount-modal_${discount.id}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirmation</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Voulez-vous vraiment supprimer cette promotion ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <form action="<c:url value="/backoffice/promotions/${discount.id}/supprimer"/>" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
-                                </td>
+                                </div>
                             </tr>
                         </c:forEach>
                     </tbody>
