@@ -31,7 +31,7 @@
                             <c:set var="seatPricing" value="${discount.seatPricing}"/>
                             <c:set var="flight" value="${seatPricing.flight}"/>
                             <c:set var="seat" value="${seatPricing.seat}"/>
-                            <tr>
+                            <tr style="vertical-align: middle">
                                 <th scope="row">${discount.id}</th>
                                 <td>
                                     <div>${flight.departureCity.name} → ${flight.arrivalCity.name}</div>
@@ -52,13 +52,13 @@
                                     <div class="btn-group btn-group-sm">
                                         <a href="<c:url value="/backoffice/promotions/${discount.id}/modifier"/>"
                                            class="btn btn-primary">
-                                            <i class="bi bi-pencil-square"></i> Modifier
+                                            <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <button type="button"
                                                 class="btn btn-danger"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#delete-discount-modal_${discount.id}">
-                                            <i class="bi bi-trash"></i> Supprimer
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
 
