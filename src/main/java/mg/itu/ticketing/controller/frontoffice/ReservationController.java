@@ -99,7 +99,7 @@ public class ReservationController {
                 reservationService.cancel(reservationService.getById(id, entityManager), entityManager));
 
             redirectData.add("success", "Réservation annulée avec succès");
-        } catch (TooLateReservationCancellationException | AlreadyCancelledReservationException e) {
+        } catch (AlreadyCancelledReservationException | TooLateReservationCancellationException e) {
             redirectData.add("error", e.getMessage());
         } catch (Exception e) {
             log.error("Erreur lors d'une annulation de réservation", e);
