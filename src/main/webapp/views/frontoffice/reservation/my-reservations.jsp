@@ -34,7 +34,7 @@
                                 <c:forEach items="${reservations}" var="reservation">
                                     <c:set var="seatPricing" value="${reservation.seatPricing}"/>
                                     <c:set var="flight" value="${seatPricing.flight}"/>
-                                    <tr>
+                                    <tr style="vertical-align: middle">
                                         <td><strong>#${reservation.id}</strong></td>
                                         <td>${flight.departureCity.name} → ${flight.arrivalCity.name}</td>
                                         <td>
