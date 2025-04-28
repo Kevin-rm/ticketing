@@ -14,6 +14,7 @@ import mg.itu.ticketing.request.FlightSearchRequest;
 import mg.itu.ticketing.request.SeatPricingRequest;
 import mg.itu.ticketing.service.*;
 import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 import mg.matsd.javaframework.validation.base.ValidationErrors;
 import mg.matsd.javaframework.validation.base.Validator;
@@ -27,7 +28,7 @@ import static mg.itu.ticketing.utils.ApplicationConstants.Views.BACKOFFICE_PREFI
 
 @Log4j2
 @RequiredArgsConstructor
-// @Authorize("ADMIN")
+@Authorize("ADMIN")
 @Controller
 @RequestMapping("/backoffice/vols")
 public class FlightController {

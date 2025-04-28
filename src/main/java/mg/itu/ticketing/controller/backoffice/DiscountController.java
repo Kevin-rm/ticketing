@@ -10,13 +10,14 @@ import mg.itu.ticketing.request.DiscountRequest;
 import mg.itu.ticketing.service.DiscountService;
 import mg.itu.ticketing.service.SeatPricingService;
 import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 import static mg.itu.ticketing.utils.ApplicationConstants.Views.BACKOFFICE_PREFIX;
 
 @Log4j2
 @RequiredArgsConstructor
-// @Authorize("ADMIN")
+@Authorize("ADMIN")
 @Controller
 @RequestMapping("/backoffice/promotions")
 public class DiscountController {
