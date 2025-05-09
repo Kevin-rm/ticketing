@@ -2,7 +2,7 @@ package mg.itu.ticketing.service;
 
 import jakarta.persistence.EntityManager;
 import mg.itu.ticketing.entity.City;
-import mg.matsd.javaframework.core.annotations.Component;
+import mg.matsd.javaframework.di.annotations.Component;
 
 import java.util.List;
 

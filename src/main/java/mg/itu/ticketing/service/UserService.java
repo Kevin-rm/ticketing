@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.request.RegistrationRequest;
 import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.itu.ticketing.utils.Facade;
-import mg.matsd.javaframework.core.annotations.Component;
-import mg.matsd.javaframework.core.utils.ArrayUtils;
 import mg.matsd.javaframework.core.utils.Assert;
+import mg.matsd.javaframework.core.utils.CollectionUtils;
 import mg.matsd.javaframework.core.utils.StringUtils;
+import mg.matsd.javaframework.di.annotations.Component;
 import mg.matsd.javaframework.security.base.User;
 import mg.matsd.javaframework.security.base.UserRole;
 import mg.matsd.javaframework.security.exceptions.DuplicateUserException;
@@ -39,7 +39,7 @@ public class UserService implements UserProvider {
 
         DatabaseUtils.executeTransactional(entityManager -> {
             List<? extends UserRole> roles = user.getRoles();
-            if (ArrayUtils.isEmpty(roles)) ((mg.itu.ticketing.entity.User) user).setUserRoles(List.of(
+            if (CollectionUtils.isEmpty(roles)) ((mg.itu.ticketing.entity.User) user).setUserRoles(List.of(
                 roleService.getOrCreateDefault(entityManager)
             ));
 

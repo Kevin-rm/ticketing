@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.request.FlightRequest;
 import mg.itu.ticketing.request.FlightSearchRequest;
-import mg.matsd.javaframework.core.annotations.Component;
+import mg.matsd.javaframework.di.annotations.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

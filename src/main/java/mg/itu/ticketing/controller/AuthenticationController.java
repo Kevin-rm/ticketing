@@ -44,7 +44,7 @@ public class AuthenticationController {
 
         try {
             AuthFacade.login(request.getEmail(), request.getPassword());
-            return AuthFacade.getCurrentUser().hasRole("ADMIN") ? "redirect:/backoffice/vols/" :
+            return AuthFacade.currentUser().hasRole("ADMIN") ? "redirect:/backoffice/vols/" :
                 "redirect:/";
         } catch (InvalidCredentialsException e) {
             redirectData.add("error", e.getMessage());

@@ -5,7 +5,7 @@ import jakarta.persistence.NoResultException;
 import mg.itu.ticketing.entity.Settings;
 import mg.itu.ticketing.entity.User;
 import mg.itu.ticketing.request.SettingsRequest;
-import mg.matsd.javaframework.core.annotations.Component;
+import mg.matsd.javaframework.di.annotations.Component;
 
 @Component
 public class SettingsService {

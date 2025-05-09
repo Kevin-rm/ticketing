@@ -10,7 +10,7 @@ public class Facade extends WebFacade {
     private Facade() { }
 
     public static PasswordHasher passwordHasher() {
-        return getWebApplicationContainer().getManagedInstance(PasswordHasher.class);
+        return webApplicationContainer().getManagedInstance(PasswordHasher.class);
     }
 
     public static User requireCurrentUser() {

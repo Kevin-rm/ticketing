@@ -4,8 +4,8 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.Discount;
 import mg.itu.ticketing.request.DiscountRequest;
-import mg.matsd.javaframework.core.annotations.Component;
 import mg.matsd.javaframework.core.annotations.Nullable;
+import mg.matsd.javaframework.di.annotations.Component;
 
 import java.util.List;
 

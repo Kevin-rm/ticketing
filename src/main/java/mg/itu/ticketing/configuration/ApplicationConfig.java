@@ -1,11 +1,11 @@
 package mg.itu.ticketing.configuration;
 
-import mg.matsd.javaframework.core.annotations.Configuration;
-import mg.matsd.javaframework.core.annotations.ManagedInstance;
 import mg.matsd.javaframework.core.annotations.Nullable;
 import mg.matsd.javaframework.core.io.ClassPathResource;
 import mg.matsd.javaframework.core.io.Resource;
 import mg.matsd.javaframework.core.utils.Assert;
+import mg.matsd.javaframework.di.annotations.Configuration;
+import mg.matsd.javaframework.di.annotations.ManagedInstance;
 import mg.matsd.javaframework.security.base.AuthenticationManager;
 import mg.matsd.javaframework.security.base.PasswordHasher;
 import mg.matsd.javaframework.security.base.Security;

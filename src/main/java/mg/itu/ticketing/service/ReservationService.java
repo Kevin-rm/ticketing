@@ -8,7 +8,7 @@ import mg.itu.ticketing.exception.AlreadyCancelledReservationException;
 import mg.itu.ticketing.exception.TooLateReservationCancellationException;
 import mg.itu.ticketing.exception.TooLateReservationException;
 import mg.itu.ticketing.request.ReservationRequest;
-import mg.matsd.javaframework.core.annotations.Component;
+import mg.matsd.javaframework.di.annotations.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -3,8 +3,8 @@ package mg.itu.ticketing.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import mg.itu.ticketing.entity.Role;
-import mg.matsd.javaframework.core.annotations.Component;
 import mg.matsd.javaframework.core.annotations.Nullable;
+import mg.matsd.javaframework.di.annotations.Component;
 
 @Component
 public class RoleService {

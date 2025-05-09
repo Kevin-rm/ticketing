@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import mg.itu.ticketing.dto.SeatWithPricingDTO;
 import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.entity.Seat;
-import mg.matsd.javaframework.core.annotations.Component;
+import mg.matsd.javaframework.di.annotations.Component;
 
 import java.util.Collection;
 import java.util.List;

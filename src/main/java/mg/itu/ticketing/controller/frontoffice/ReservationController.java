@@ -1,6 +1,5 @@
 package mg.itu.ticketing.controller.frontoffice;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import mg.itu.prom16.annotations.*;
@@ -18,6 +17,7 @@ import mg.itu.ticketing.utils.ApplicationConstants;
 import mg.itu.ticketing.utils.DatabaseUtils;
 import mg.itu.ticketing.utils.Facade;
 import mg.matsd.javaframework.security.annotation.Authorize;
+import mg.matsd.javaframework.servletwrapper.http.Response;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 import java.io.InputStream;
@@ -111,7 +111,7 @@ public class ReservationController {
 
     @Get("/reservations/{id}/pdf")
     public String downloadPdf(
-        @PathVariable Integer id, RedirectData redirectData, HttpServletResponse httpServletResponse
+        @PathVariable Integer id, RedirectData redirectData, Response response
     ) {
         try (HttpClient httpClient = HttpClient.newHttpClient()) {
             try {
@@ -125,12 +125,12 @@ public class ReservationController {
                 if (httpResponse.statusCode() == 200) {
                     HttpHeaders httpHeaders = httpResponse.headers();
                     httpHeaders.firstValue("Content-Type")
-                        .ifPresent(httpServletResponse::setContentType);
+                        .ifPresent(response::setContentType);
                     httpHeaders.firstValue("Content-Disposition")
-                        .ifPresent(cd -> httpServletResponse.setHeader("Content-Disposition", cd));
+                        .ifPresent(cd -> response.setHeader("Content-Disposition", cd));
 
                     try (final InputStream inputStream = httpResponse.body();
-                         final OutputStream outputStream = httpServletResponse.getOutputStream()
+                         final OutputStream outputStream = response.getOutputStream()
                     ) { inputStream.transferTo(outputStream); }
 
                     return null;

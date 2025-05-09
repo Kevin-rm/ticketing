@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.ticketing.entity.Flight;
 import mg.itu.ticketing.entity.Seat;
 import mg.itu.ticketing.entity.SeatPricing;
-import mg.matsd.javaframework.core.annotations.Component;
 import mg.matsd.javaframework.core.utils.Assert;
+import mg.matsd.javaframework.di.annotations.Component;
 
 import java.util.Collection;
 import java.util.List;

@@ -5,12 +5,11 @@ import lombok.extern.log4j.Log4j2;
 import mg.itu.prom16.annotations.*;
 import mg.itu.prom16.base.Model;
 import mg.itu.prom16.base.RedirectData;
-import mg.itu.prom16.utils.AuthFacade;
 import mg.itu.prom16.validation.ModelBindingResult;
-import mg.itu.ticketing.entity.User;
 import mg.itu.ticketing.request.SettingsRequest;
 import mg.itu.ticketing.service.SettingsService;
 import mg.itu.ticketing.utils.DatabaseUtils;
+import mg.itu.ticketing.utils.Facade;
 import mg.matsd.javaframework.security.annotation.Authorize;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
@@ -47,7 +46,7 @@ public class SettingsController {
 
         try {
             DatabaseUtils.executeTransactional(entityManager ->
-                settingsService.save(settingsRequest, entityManager, (User) AuthFacade.getCurrentUser()));
+                settingsService.save(settingsRequest, entityManager, Facade.requireCurrentUser()));
             redirectData.add("success", "Paramètres enregistrés avec succès");
         } catch (Exception e) {
             log.error("Erreur lors d'un enregistrement des paramètres", e);
