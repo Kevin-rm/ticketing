@@ -6,13 +6,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-@Deprecated
 @Getter
 @ToString
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"seat_id", "flight_id"}))
-public class SeatPricing {
+public class SeatPricingV2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -21,8 +20,13 @@ public class SeatPricing {
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
-    @OneToOne(mappedBy = "seatPricing")
-    private Discount discount;
+    @Setter
+    @Column(nullable = false)
+    private Integer availableSeatCount;
+
+    @Setter
+    @Column(nullable = false)
+    private Integer seatCount; // The number of seats available at this price
 
     @Setter
     @ManyToOne
@@ -33,4 +37,13 @@ public class SeatPricing {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Flight flight;
+
+    @Setter
+    @Column(nullable = false)
+    private LocalDateTime deadline;
+
+    @PrePersist
+    public void prePersist() {
+        availableSeatCount = seatCount;
+    }
 }

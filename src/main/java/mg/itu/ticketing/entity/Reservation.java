@@ -45,6 +45,14 @@ public class Reservation {
 
     @Setter
     @ManyToOne
+    private SeatPricingV2 seatPricingV2; // Replaces the previous seatPricing
+
+    @Setter
+    @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
+
+    // This is used for the new seatPricing system
+    @Setter
+    private Boolean isPaid;
 }

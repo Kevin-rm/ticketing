@@ -37,4 +37,9 @@ public class Flight {
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatPricing> seatPricingList;
+
+    // This is queried and injected by the service class
+    @Transient
+    @Setter
+    private List<SeatPricingV2> seatPricingV2List;
 }

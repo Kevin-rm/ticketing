@@ -17,10 +17,10 @@ import mg.matsd.javaframework.security.exceptions.InvalidCredentialsException;
 import mg.matsd.javaframework.validation.annotations.Validate;
 
 @Log4j2
-@Anonymous
 @Controller
 public class AuthenticationController {
 
+    @Anonymous
     @Get("/connexion")
     public String login(Model model) {
         if (!model.hasData("l"))

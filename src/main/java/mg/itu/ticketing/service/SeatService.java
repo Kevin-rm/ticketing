@@ -26,6 +26,7 @@ public class SeatService {
             .getResultList();
     }
 
+    @Deprecated
     public List<SeatWithPricingDTO> getAllWithPricingByFlight(
         final Integer flightId, final Flight flight, final EntityManager entityManager
     ) {
